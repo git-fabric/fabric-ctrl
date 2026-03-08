@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "fabric-ctrl": {
+      "command": "npx",
+      "args": ["tsx", "src/mcp/index.ts"],
+      "env": {
+        "GITHUB_APP_ID": "${GITHUB_APP_ID}",
+        "GITHUB_APP_PRIVATE_KEY_PATH": "${GITHUB_APP_PRIVATE_KEY_PATH}",
+        "GITHUB_INSTALLATION_ID": "${GITHUB_INSTALLATION_ID}",
+        "GITHUB_WEBHOOK_SECRET": "${GITHUB_WEBHOOK_SECRET}"
+      }
+    }
+  }
+}

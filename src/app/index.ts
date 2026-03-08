@@ -73,9 +73,9 @@ app.post(
 app.get("/health", (c) => c.json({ status: "ok", service: "fabric-ctrl" }));
 
 const port = Number(process.env.WEBHOOK_PORT ?? 3000);
-console.log(`[fabric-ctrl:app] Webhook server listening on :${port}`);
 
-export default {
-  port,
-  fetch: app.fetch,
-};
+import { serve } from "@hono/node-server";
+
+serve({ fetch: app.fetch, port }, () => {
+  console.log(`[fabric-ctrl:app] Webhook server listening on :${port}`);
+});

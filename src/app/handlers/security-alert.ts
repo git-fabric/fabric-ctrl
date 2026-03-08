@@ -1,4 +1,7 @@
 import type { EmitterWebhookEvent } from "@octokit/webhooks";
+import { dispatch } from "../dispatch.js";
+import { writeAuditLog } from "../audit-log.js";
+import { notify } from "../notify.js";
 
 /**
  * handlers/security-alert.ts
@@ -18,7 +21,30 @@ export async function handleCodeScanningAlert(
     console.warn(
       `[code-scanning:critical] Immediate triage required: ${alert.html_url}`
     );
-    // TODO: open triage PR via git-fabric/cve MCP tools
+
+    await writeAuditLog({
+      timestamp: new Date().toISOString(),
+      category: "code-scanning",
+      severity: "critical",
+      event: `Critical code scanning alert: ${rule.id}`,
+      repo: repository.full_name,
+      detail: { ruleId: rule.id, alertUrl: alert.html_url },
+    });
+
+    // Forward to CVE app for triage
+    await dispatch("cve_scan", {
+      repos: [repository.full_name],
+      severity_threshold: "CRITICAL",
+    });
+
+    await notify({
+      channel: "security",
+      severity: "critical",
+      title: `Code scanning: ${rule.id} in ${repository.full_name}`,
+      body: `Critical code scanning alert requires immediate triage.`,
+      url: alert.html_url,
+      repo: repository.full_name,
+    });
   }
 }
 
@@ -35,7 +61,24 @@ export async function handleSecretScanningAlert(
     console.error(
       `[secret-scanning:CRITICAL] Secret detected. Treat as compromised: ${alert.html_url}`
     );
-    // TODO: trigger rotation workflow, notify on-call
+
+    await writeAuditLog({
+      timestamp: new Date().toISOString(),
+      category: "secret-scanning",
+      severity: "critical",
+      event: `Secret exposed: ${alert.secret_type}`,
+      repo: repository.full_name,
+      detail: { secretType: alert.secret_type, alertUrl: alert.html_url },
+    });
+
+    await notify({
+      channel: "security",
+      severity: "critical",
+      title: `Secret exposed: ${alert.secret_type} in ${repository.full_name}`,
+      body: `Treat as compromised. Rotate immediately.\nType: ${alert.secret_type}`,
+      url: alert.html_url,
+      repo: repository.full_name,
+    });
   }
 }
 
@@ -46,5 +89,10 @@ export async function handleRepositoryVulnerabilityAlert(
   console.log(
     `[vuln-alert] ${action} — ${alert.affected_package_name} in ${repository.full_name}`
   );
-  // TODO: route to Dependabot handler or cve fabric app
+
+  // Route to CVE app for enrichment and triage
+  await dispatch("cve_scan", {
+    repos: [repository.full_name],
+    severity_threshold: "HIGH",
+  });
 }

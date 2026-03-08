@@ -1,7 +1,7 @@
 {
   "name": "@git-fabric/fabric-ctrl",
   "version": "0.1.0",
-  "description": "Zero-trust control plane for the git-fabric org — GitHub App identity, security automation, and MCP org tooling.",
+  "description": "Zero-trust control plane for the git-fabric org — GitHub App identity, security automation, and MCP aggregation plane.",
   "type": "module",
   "engines": {
     "node": ">=20"
@@ -16,14 +16,26 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@git-fabric/gateway": "github:git-fabric/gateway",
+    "@git-fabric/aiana": "github:git-fabric/aiana",
+    "@git-fabric/chat": "github:git-fabric/chat",
+    "@git-fabric/cloudflare": "github:git-fabric/cloudflare",
+    "@git-fabric/cve": "github:git-fabric/cve",
+    "@git-fabric/git": "github:git-fabric/git",
+    "@git-fabric/k8s": "github:git-fabric/k8s",
+    "@git-fabric/proxmox": "github:git-fabric/proxmox",
+    "@git-fabric/sandfly": "github:git-fabric/sandfly",
+    "@git-fabric/tailscale": "github:git-fabric/tailscale",
+    "@git-fabric/unifi": "github:git-fabric/unifi",
     "@hono/node-server": "^1.19.11",
-    "@modelcontextprotocol/sdk": "^1.0.0",
+    "@modelcontextprotocol/sdk": "^1.26.0",
     "@octokit/app": "^15.0.0",
     "@octokit/auth-app": "^7.0.0",
     "@octokit/rest": "^21.0.0",
     "@octokit/webhooks": "^13.0.0",
     "dotenv": "^16.0.0",
     "hono": "^4.0.0",
+    "yaml": "^2.3.0",
     "zod": "^3.22.0",
     "zod-to-json-schema": "^3.25.1"
   },

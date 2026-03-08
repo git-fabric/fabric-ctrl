@@ -1,0 +1,39 @@
+# gateway.yaml — Fabric app manifest
+#
+# fabric-ctrl embeds the gateway and loads all fabric apps in-process.
+# Each app's createApp() is called at startup and registered in the
+# shared registry. Disable an app by setting enabled: false.
+#
+# Env vars are injected per-app before createApp() is called.
+# Secrets should live in .env, not here.
+
+apps:
+  - name: "@git-fabric/unifi"
+    enabled: true
+
+  - name: "@git-fabric/proxmox"
+    enabled: true
+
+  - name: "@git-fabric/k8s"
+    enabled: true
+
+  - name: "@git-fabric/tailscale"
+    enabled: true
+
+  - name: "@git-fabric/cloudflare"
+    enabled: true
+
+  - name: "@git-fabric/sandfly"
+    enabled: true
+
+  - name: "@git-fabric/cve"
+    enabled: true
+
+  - name: "@git-fabric/git"
+    enabled: true
+
+  - name: "@git-fabric/chat"
+    enabled: true
+
+  - name: "@git-fabric/aiana"
+    enabled: true

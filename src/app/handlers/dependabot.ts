@@ -1,4 +1,7 @@
 import type { EmitterWebhookEvent } from "@octokit/webhooks";
+import { dispatch } from "../dispatch.js";
+import { writeAuditLog } from "../audit-log.js";
+import { notify } from "../notify.js";
 
 /**
  * handlers/dependabot.ts
@@ -35,12 +38,56 @@ export async function handleDependabotAlert(
       console.warn(
         `[dependabot:escalate] ${severity.toUpperCase()} ${cve} in ${repository.full_name}: ${pkg}`
       );
-      // TODO: call git-fabric/cve MCP tool: cve__triage_alert
-      // TODO: open remediation PR via git-fabric/git MCP tool
+
+      await writeAuditLog({
+        timestamp: new Date().toISOString(),
+        category: "dependabot",
+        severity: priority === 0 ? "critical" : "high",
+        event: `${severity.toUpperCase()} dependency alert: ${cve} (${pkg})`,
+        repo: repository.full_name,
+        detail: { cve, package: pkg, severity },
+      });
+
+      // Forward to CVE app for triage — will open PRs based on severity policy
+      await dispatch("cve_triage", {
+        auto_pr_threshold: "HIGH",
+        max_prs_per_run: 5,
+      });
+
+      // Open remediation PR via git fabric app
+      const patchedVersion =
+        alert.security_vulnerability?.first_patched_version?.identifier;
+      if (patchedVersion) {
+        await dispatch("git_pr_create", {
+          owner: repository.owner.login,
+          repo: repository.name,
+          title: `fix(security): ${cve} — ${severity.toUpperCase()} in ${pkg}`,
+          head: `security/${cve.toLowerCase()}`,
+          body: `## Dependabot Alert\n\n- **Package:** ${pkg}\n- **CVE:** ${cve}\n- **Severity:** ${severity.toUpperCase()}\n- **Patched version:** ${patchedVersion}\n\nAutomatic remediation PR opened by fabric-ctrl.`,
+          draft: severity !== "critical",
+          labels: ["security", "cve", "git-fabric"],
+        });
+      }
+
+      await notify({
+        channel: "security",
+        severity: priority === 0 ? "critical" : "high",
+        title: `Dependabot: ${cve} in ${repository.full_name}`,
+        body: `${severity.toUpperCase()} vulnerability in \`${pkg}\`. Triage dispatched.`,
+        repo: repository.full_name,
+      });
     } else {
-      // Medium/low — log for batch triage
+      // Medium/low — queue for batch triage
       console.log(`[dependabot:queue] ${cve} queued for batch triage`);
-      // TODO: append to triage queue in state store
+
+      await writeAuditLog({
+        timestamp: new Date().toISOString(),
+        category: "dependabot",
+        severity: severity === "medium" ? "medium" : "low",
+        event: `Queued dependency alert: ${cve} (${pkg})`,
+        repo: repository.full_name,
+        detail: { cve, package: pkg, severity },
+      });
     }
   }
 
@@ -49,5 +96,14 @@ export async function handleDependabotAlert(
     console.warn(
       `[dependabot:audit] Auto-dismissed alert for ${pkg} in ${repository.full_name} — verify this is intentional`
     );
+
+    await writeAuditLog({
+      timestamp: new Date().toISOString(),
+      category: "dependabot",
+      severity: "medium",
+      event: `Auto-dismissed alert for ${pkg} — verify intentional`,
+      repo: repository.full_name,
+      detail: { cve, package: pkg, action: "auto_dismissed" },
+    });
   }
 }

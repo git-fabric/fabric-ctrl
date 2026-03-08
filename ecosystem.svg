@@ -1,155 +1,109 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" width="900" height="340" fill="none">
   <defs>
+    <style>
+      @keyframes flowRight { 0% { stroke-dashoffset: 24; } 100% { stroke-dashoffset: 0; } }
+      @keyframes ctrlPulse { 0%, 100% { stroke: #58a6ff; } 50% { stroke: #bc8cff; } }
+      @keyframes ringPulse { 0%, 100% { opacity: 0; stroke-width: 1px; } 50% { opacity: 0.2; stroke-width: 3px; } }
+      @keyframes repoPulse1 { 0%, 100% { stroke-opacity: 0.3; } 50% { stroke-opacity: 0.7; } }
+      @keyframes repoPulse2 { 0%, 100% { stroke-opacity: 0.3; } 50% { stroke-opacity: 0.7; } }
+      @keyframes repoPulse3 { 0%, 100% { stroke-opacity: 0.3; } 50% { stroke-opacity: 0.7; } }
+      @keyframes repoPulse4 { 0%, 100% { stroke-opacity: 0.3; } 50% { stroke-opacity: 0.7; } }
+      @keyframes repoPulse5 { 0%, 100% { stroke-opacity: 0.3; } 50% { stroke-opacity: 0.7; } }
+      @keyframes repoPulse6 { 0%, 100% { stroke-opacity: 0.3; } 50% { stroke-opacity: 0.7; } }
+      @keyframes repoPulse7 { 0%, 100% { stroke-opacity: 0.3; } 50% { stroke-opacity: 0.7; } }
+      .flow-line { stroke-dasharray: 12 12; animation: flowRight 1.5s linear infinite; }
+      .ctrl-box { animation: ctrlPulse 6s ease-in-out infinite; }
+      .ctrl-ring { animation: ringPulse 3s ease-in-out infinite; }
+      .rp1 { animation: repoPulse1 3s ease-in-out infinite; }
+      .rp2 { animation: repoPulse2 3s ease-in-out 0.3s infinite; }
+      .rp3 { animation: repoPulse3 3s ease-in-out 0.6s infinite; }
+      .rp4 { animation: repoPulse4 3s ease-in-out 0.9s infinite; }
+      .rp5 { animation: repoPulse5 3s ease-in-out 1.2s infinite; }
+      .rp6 { animation: repoPulse6 3s ease-in-out 1.5s infinite; }
+      .rp7 { animation: repoPulse7 3s ease-in-out 1.8s infinite; }
+    </style>
     <linearGradient id="e-bg" x1="0" y1="0" x2="900" y2="340" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#0d1117"/>
-      <stop offset="100%" stop-color="#161b22"/>
+      <stop offset="0%" style="stop-color:#0d1117"/>
+      <stop offset="100%" style="stop-color:#161b22"/>
     </linearGradient>
-    <filter id="e-glow">
-      <feGaussianBlur stdDeviation="2" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
   </defs>
 
   <rect width="900" height="340" rx="16" fill="url(#e-bg)"/>
   <rect x="1" y="1" width="898" height="338" rx="15" fill="none" stroke="#30363d" stroke-width="1"/>
 
-  <!-- Title -->
-  <text x="450" y="36" font-family="'SF Mono', 'Fira Code', Consolas, monospace" font-size="14" fill="#8b949e" text-anchor="middle" letter-spacing="3" opacity="0.6">ECOSYSTEM</text>
+  <text x="450" y="36" font-family="'SF Mono','Fira Code',Consolas,monospace" font-size="14" fill="#8b949e" text-anchor="middle" letter-spacing="3" opacity="0.6">ECOSYSTEM</text>
 
-  <!-- ═══════ LEFT COLUMN: CONSUMERS ═══════ -->
-  <text x="65" y="68" font-family="'SF Mono', Consolas, monospace" font-size="10" fill="#484f58" text-anchor="middle" letter-spacing="1">CONSUMERS</text>
+  <!-- CONSUMERS -->
+  <text x="65" y="68" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#484f58" text-anchor="middle" letter-spacing="1">CONSUMERS</text>
 
   <rect x="15" y="80" width="100" height="34" rx="6" fill="#0d1117" stroke="#bc8cff" stroke-width="1"/>
-  <text x="65" y="101" font-family="'SF Mono', Consolas, monospace" font-size="10" fill="#bc8cff" text-anchor="middle">git-steer</text>
+  <text x="65" y="101" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#bc8cff" text-anchor="middle">git-steer</text>
 
   <rect x="15" y="124" width="100" height="34" rx="6" fill="#0d1117" stroke="#3fb950" stroke-width="1"/>
-  <text x="65" y="145" font-family="'SF Mono', Consolas, monospace" font-size="10" fill="#3fb950" text-anchor="middle">cortex</text>
+  <text x="65" y="145" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#3fb950" text-anchor="middle">cortex</text>
 
   <rect x="15" y="168" width="100" height="34" rx="6" fill="#0d1117" stroke="#58a6ff" stroke-width="1"/>
-  <text x="65" y="189" font-family="'SF Mono', Consolas, monospace" font-size="10" fill="#58a6ff" text-anchor="middle">Claude</text>
+  <text x="65" y="189" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#58a6ff" text-anchor="middle">Claude</text>
 
-  <!-- Animated arrows from consumers to fabric-ctrl -->
-  <g>
-    <line x1="115" y1="97" x2="250" y2="130" stroke="#30363d" stroke-width="1" stroke-dasharray="4,4"/>
-    <circle r="2.5" fill="#bc8cff" opacity="0">
-      <animate attributeName="cx" values="115;250" dur="2s" repeatCount="indefinite"/>
-      <animate attributeName="cy" values="97;130" dur="2s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0.7;0" dur="2s" repeatCount="indefinite"/>
-    </circle>
+  <!-- Animated flow lines -->
+  <line x1="115" y1="97" x2="250" y2="130" stroke="#bc8cff" stroke-width="1" class="flow-line"/>
+  <line x1="115" y1="141" x2="250" y2="150" stroke="#3fb950" stroke-width="1" class="flow-line"/>
+  <line x1="115" y1="185" x2="250" y2="170" stroke="#58a6ff" stroke-width="1" class="flow-line"/>
 
-    <line x1="115" y1="141" x2="250" y2="150" stroke="#30363d" stroke-width="1" stroke-dasharray="4,4"/>
-    <circle r="2.5" fill="#3fb950" opacity="0">
-      <animate attributeName="cx" values="115;250" dur="2.2s" begin="0.4s" repeatCount="indefinite"/>
-      <animate attributeName="cy" values="141;150" dur="2.2s" begin="0.4s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0.7;0" dur="2.2s" begin="0.4s" repeatCount="indefinite"/>
-    </circle>
-
-    <line x1="115" y1="185" x2="250" y2="170" stroke="#30363d" stroke-width="1" stroke-dasharray="4,4"/>
-    <circle r="2.5" fill="#58a6ff" opacity="0">
-      <animate attributeName="cx" values="115;250" dur="2.4s" begin="0.8s" repeatCount="indefinite"/>
-      <animate attributeName="cy" values="185;170" dur="2.4s" begin="0.8s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0.7;0" dur="2.4s" begin="0.8s" repeatCount="indefinite"/>
-    </circle>
-  </g>
-
-  <!-- ═══════ CENTER: FABRIC-CTRL ═══════ -->
-  <rect x="250" y="105" width="200" height="90" rx="12" fill="#0d1117" stroke="#58a6ff" stroke-width="2">
-    <animate attributeName="stroke" values="#58a6ff;#bc8cff;#58a6ff" dur="6s" repeatCount="indefinite"/>
-  </rect>
-
-  <!-- Shield inside -->
-  <path d="M310 127 L325 133 L325 147 C325 157 319 162 310 166 C301 162 295 157 295 147 L295 133 Z"
-        fill="none" stroke="#58a6ff" stroke-width="1.2" opacity="0.5"/>
+  <!-- FABRIC-CTRL -->
+  <rect x="250" y="105" width="200" height="90" rx="12" fill="#0d1117" stroke="#58a6ff" stroke-width="2" class="ctrl-box"/>
+  <path d="M310 127 L325 133 L325 147 C325 157 319 162 310 166 C301 162 295 157 295 147 L295 133 Z" fill="none" stroke="#58a6ff" stroke-width="1.2" opacity="0.5"/>
   <circle cx="310" cy="147" r="2" fill="#58a6ff" opacity="0.7"/>
+  <text x="335" y="140" font-family="'SF Mono',Consolas,monospace" font-size="15" fill="#e6edf3" font-weight="700">fabric-ctrl</text>
+  <text x="335" y="158" font-family="'SF Mono',Consolas,monospace" font-size="9" fill="#8b949e">org layer</text>
+  <text x="335" y="172" font-family="'SF Mono',Consolas,monospace" font-size="9" fill="#484f58">MCP + webhooks</text>
+  <rect x="248" y="103" width="204" height="94" rx="14" fill="none" stroke="#58a6ff" class="ctrl-ring"/>
 
-  <text x="335" y="140" font-family="'SF Mono', Consolas, monospace" font-size="15" fill="#e6edf3" font-weight="700">fabric-ctrl</text>
-  <text x="335" y="158" font-family="'SF Mono', Consolas, monospace" font-size="9" fill="#8b949e">org layer</text>
-  <text x="335" y="172" font-family="'SF Mono', Consolas, monospace" font-size="9" fill="#484f58">MCP + webhooks</text>
-
-  <!-- Pulse ring -->
-  <rect x="248" y="103" width="204" height="94" rx="14" fill="none" stroke="#58a6ff" opacity="0">
-    <animate attributeName="opacity" values="0;0.2;0" dur="3s" repeatCount="indefinite"/>
-    <animate attributeName="stroke-width" values="1;3;1" dur="3s" repeatCount="indefinite"/>
-  </rect>
-
-  <!-- ═══════ RIGHT COLUMN: INFRASTRUCTURE DOMAINS ═══════ -->
-  <text x="690" y="58" font-family="'SF Mono', Consolas, monospace" font-size="10" fill="#484f58" text-anchor="middle" letter-spacing="1">INFRASTRUCTURE DOMAINS</text>
-
-  <!-- Arrow from fabric-ctrl to "installed on" label and then to domains -->
+  <!-- org scope line -->
   <line x1="450" y1="150" x2="520" y2="150" stroke="#30363d" stroke-width="1"/>
-  <text x="485" y="144" font-family="'SF Mono', Consolas, monospace" font-size="8" fill="#484f58" text-anchor="middle">org scope</text>
+  <text x="485" y="144" font-family="'SF Mono',Consolas,monospace" font-size="8" fill="#484f58" text-anchor="middle">org scope</text>
 
-  <!-- Vertical spine -->
-  <line x1="530" y1="70" x2="530" y2="320" stroke="#21262d" stroke-width="1"/>
+  <!-- INFRASTRUCTURE DOMAINS -->
+  <text x="690" y="58" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#484f58" text-anchor="middle" letter-spacing="1">INFRASTRUCTURE DOMAINS</text>
 
-  <!-- Domain repos with animated connections -->
-  <g>
-    <!-- unifi -->
-    <line x1="530" y1="85" x2="570" y2="85" stroke="#3fb950" stroke-width="1" opacity="0.4"/>
-    <rect x="570" y="70" width="140" height="30" rx="5" fill="#0d1117" stroke="#3fb950" stroke-width="1" opacity="0.6">
-      <animate attributeName="stroke-opacity" values="0.3;0.7;0.3" dur="3s" begin="0s" repeatCount="indefinite"/>
-    </rect>
-    <text x="590" y="90" font-family="'SF Mono', Consolas, monospace" font-size="10" fill="#3fb950">unifi</text>
-    <text x="680" y="90" font-family="'SF Mono', Consolas, monospace" font-size="8" fill="#484f58">own MCP</text>
+  <line x1="530" y1="70" x2="530" y2="290" stroke="#21262d" stroke-width="1"/>
 
-    <!-- proxmox -->
-    <line x1="530" y1="115" x2="570" y2="115" stroke="#3fb950" stroke-width="1" opacity="0.4"/>
-    <rect x="570" y="100" width="140" height="30" rx="5" fill="#0d1117" stroke="#3fb950" stroke-width="1" opacity="0.6">
-      <animate attributeName="stroke-opacity" values="0.3;0.7;0.3" dur="3s" begin="0.3s" repeatCount="indefinite"/>
-    </rect>
-    <text x="590" y="120" font-family="'SF Mono', Consolas, monospace" font-size="10" fill="#3fb950">proxmox</text>
-    <text x="680" y="120" font-family="'SF Mono', Consolas, monospace" font-size="8" fill="#484f58">own MCP</text>
+  <line x1="530" y1="85" x2="570" y2="85" stroke="#3fb950" stroke-width="1" opacity="0.4"/>
+  <rect x="570" y="70" width="140" height="30" rx="5" fill="#0d1117" stroke="#3fb950" stroke-width="1" class="rp1"/>
+  <text x="590" y="90" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#3fb950">unifi</text>
+  <text x="680" y="90" font-family="'SF Mono',Consolas,monospace" font-size="8" fill="#484f58">own MCP</text>
 
-    <!-- k8s -->
-    <line x1="530" y1="145" x2="570" y2="145" stroke="#3fb950" stroke-width="1" opacity="0.4"/>
-    <rect x="570" y="130" width="140" height="30" rx="5" fill="#0d1117" stroke="#3fb950" stroke-width="1" opacity="0.6">
-      <animate attributeName="stroke-opacity" values="0.3;0.7;0.3" dur="3s" begin="0.6s" repeatCount="indefinite"/>
-    </rect>
-    <text x="590" y="150" font-family="'SF Mono', Consolas, monospace" font-size="10" fill="#3fb950">k8s</text>
-    <text x="680" y="150" font-family="'SF Mono', Consolas, monospace" font-size="8" fill="#484f58">own MCP</text>
+  <line x1="530" y1="115" x2="570" y2="115" stroke="#3fb950" stroke-width="1" opacity="0.4"/>
+  <rect x="570" y="100" width="140" height="30" rx="5" fill="#0d1117" stroke="#3fb950" stroke-width="1" class="rp2"/>
+  <text x="590" y="120" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#3fb950">proxmox</text>
+  <text x="680" y="120" font-family="'SF Mono',Consolas,monospace" font-size="8" fill="#484f58">own MCP</text>
 
-    <!-- sandfly -->
-    <line x1="530" y1="175" x2="570" y2="175" stroke="#3fb950" stroke-width="1" opacity="0.4"/>
-    <rect x="570" y="160" width="140" height="30" rx="5" fill="#0d1117" stroke="#3fb950" stroke-width="1" opacity="0.6">
-      <animate attributeName="stroke-opacity" values="0.3;0.7;0.3" dur="3s" begin="0.9s" repeatCount="indefinite"/>
-    </rect>
-    <text x="590" y="180" font-family="'SF Mono', Consolas, monospace" font-size="10" fill="#3fb950">sandfly</text>
-    <text x="680" y="180" font-family="'SF Mono', Consolas, monospace" font-size="8" fill="#484f58">own MCP</text>
+  <line x1="530" y1="145" x2="570" y2="145" stroke="#3fb950" stroke-width="1" opacity="0.4"/>
+  <rect x="570" y="130" width="140" height="30" rx="5" fill="#0d1117" stroke="#3fb950" stroke-width="1" class="rp3"/>
+  <text x="590" y="150" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#3fb950">k8s</text>
+  <text x="680" y="150" font-family="'SF Mono',Consolas,monospace" font-size="8" fill="#484f58">own MCP</text>
 
-    <!-- cloudflare -->
-    <line x1="530" y1="205" x2="570" y2="205" stroke="#3fb950" stroke-width="1" opacity="0.4"/>
-    <rect x="570" y="190" width="140" height="30" rx="5" fill="#0d1117" stroke="#3fb950" stroke-width="1" opacity="0.6">
-      <animate attributeName="stroke-opacity" values="0.3;0.7;0.3" dur="3s" begin="1.2s" repeatCount="indefinite"/>
-    </rect>
-    <text x="590" y="210" font-family="'SF Mono', Consolas, monospace" font-size="10" fill="#3fb950">cloudflare</text>
-    <text x="680" y="210" font-family="'SF Mono', Consolas, monospace" font-size="8" fill="#484f58">own MCP</text>
+  <line x1="530" y1="175" x2="570" y2="175" stroke="#3fb950" stroke-width="1" opacity="0.4"/>
+  <rect x="570" y="160" width="140" height="30" rx="5" fill="#0d1117" stroke="#3fb950" stroke-width="1" class="rp4"/>
+  <text x="590" y="180" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#3fb950">sandfly</text>
+  <text x="680" y="180" font-family="'SF Mono',Consolas,monospace" font-size="8" fill="#484f58">own MCP</text>
 
-    <!-- cve -->
-    <line x1="530" y1="235" x2="570" y2="235" stroke="#ff7b72" stroke-width="1" opacity="0.4"/>
-    <rect x="570" y="220" width="140" height="30" rx="5" fill="#0d1117" stroke="#ff7b72" stroke-width="1" opacity="0.6">
-      <animate attributeName="stroke-opacity" values="0.3;0.7;0.3" dur="3s" begin="1.5s" repeatCount="indefinite"/>
-    </rect>
-    <text x="590" y="240" font-family="'SF Mono', Consolas, monospace" font-size="10" fill="#ff7b72">cve</text>
-    <text x="680" y="240" font-family="'SF Mono', Consolas, monospace" font-size="8" fill="#484f58">triage</text>
+  <line x1="530" y1="205" x2="570" y2="205" stroke="#3fb950" stroke-width="1" opacity="0.4"/>
+  <rect x="570" y="190" width="140" height="30" rx="5" fill="#0d1117" stroke="#3fb950" stroke-width="1" class="rp5"/>
+  <text x="590" y="210" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#3fb950">cloudflare</text>
+  <text x="680" y="210" font-family="'SF Mono',Consolas,monospace" font-size="8" fill="#484f58">own MCP</text>
 
-    <!-- gateway -->
-    <line x1="530" y1="265" x2="570" y2="265" stroke="#f0883e" stroke-width="1" opacity="0.4"/>
-    <rect x="570" y="250" width="140" height="30" rx="5" fill="#0d1117" stroke="#f0883e" stroke-width="1" opacity="0.6">
-      <animate attributeName="stroke-opacity" values="0.3;0.7;0.3" dur="3s" begin="1.8s" repeatCount="indefinite"/>
-    </rect>
-    <text x="590" y="270" font-family="'SF Mono', Consolas, monospace" font-size="10" fill="#f0883e">gateway</text>
-    <text x="680" y="270" font-family="'SF Mono', Consolas, monospace" font-size="8" fill="#484f58">routing</text>
+  <line x1="530" y1="235" x2="570" y2="235" stroke="#ff7b72" stroke-width="1" opacity="0.4"/>
+  <rect x="570" y="220" width="140" height="30" rx="5" fill="#0d1117" stroke="#ff7b72" stroke-width="1" class="rp6"/>
+  <text x="590" y="240" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#ff7b72">cve</text>
+  <text x="680" y="240" font-family="'SF Mono',Consolas,monospace" font-size="8" fill="#484f58">triage</text>
 
-    <!-- Data pulse down the spine -->
-    <circle r="3" fill="#58a6ff" opacity="0">
-      <animate attributeName="cx" values="530;530" dur="3s" repeatCount="indefinite"/>
-      <animate attributeName="cy" values="70;280" dur="3s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0.6;0" dur="3s" repeatCount="indefinite"/>
-    </circle>
-  </g>
+  <line x1="530" y1="265" x2="570" y2="265" stroke="#f0883e" stroke-width="1" opacity="0.4"/>
+  <rect x="570" y="250" width="140" height="30" rx="5" fill="#0d1117" stroke="#f0883e" stroke-width="1" class="rp7"/>
+  <text x="590" y="270" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#f0883e">gateway</text>
+  <text x="680" y="270" font-family="'SF Mono',Consolas,monospace" font-size="8" fill="#484f58">routing</text>
 
-  <!-- Bottom note -->
-  <text x="350" y="310" font-family="'SF Mono', Consolas, monospace" font-size="9" fill="#484f58" text-anchor="middle">
-    fabric-ctrl owns the org layer &middot; each app owns its infrastructure domain &middot; gateway routes between them
+  <text x="350" y="310" font-family="'SF Mono',Consolas,monospace" font-size="9" fill="#484f58" text-anchor="middle">
+    fabric-ctrl owns the org layer · each app owns its infrastructure domain · gateway routes between them
   </text>
 </svg>

@@ -1,141 +1,101 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 320" width="900" height="320" fill="none">
   <defs>
+    <style>
+      @keyframes badgePulse1 { 0%, 100% { opacity: 0; } 50% { opacity: 0.5; } }
+      @keyframes badgePulse2 { 0%, 100% { opacity: 0; } 50% { opacity: 0.5; } }
+      @keyframes badgePulse3 { 0%, 100% { opacity: 0; } 50% { opacity: 0.5; } }
+      @keyframes badgePulse4 { 0%, 100% { opacity: 0; } 50% { opacity: 0.5; } }
+      @keyframes iconPulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 0.9; } }
+      @keyframes lockGlow { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.9; } }
+      @keyframes writeLine { 0%, 100% { x2: 10; } 50% { x2: 28; } }
+      @keyframes scanLine { 0% { transform: translateX(-100px); opacity: 0; } 50% { opacity: 0.3; } 100% { transform: translateX(900px); opacity: 0; } }
+      .bp1 { animation: badgePulse1 2s ease-in-out infinite; }
+      .bp2 { animation: badgePulse2 2s ease-in-out 0.5s infinite; }
+      .bp3 { animation: badgePulse3 2s ease-in-out 1s infinite; }
+      .bp4 { animation: badgePulse4 2s ease-in-out 1.5s infinite; }
+      .icon-pulse { animation: iconPulse 3s ease-in-out infinite; }
+      .lock-glow { animation: lockGlow 2s ease-in-out infinite; }
+      .scan { animation: scanLine 6s linear infinite; }
+    </style>
     <linearGradient id="zt-bg" x1="0" y1="0" x2="900" y2="320" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#0d1117"/>
-      <stop offset="100%" stop-color="#161b22"/>
+      <stop offset="0%" style="stop-color:#0d1117"/>
+      <stop offset="100%" style="stop-color:#161b22"/>
     </linearGradient>
-    <filter id="zt-glow">
-      <feGaussianBlur stdDeviation="2" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <clipPath id="zt-clip">
-      <rect x="2" y="2" width="896" height="316" rx="14"/>
-    </clipPath>
   </defs>
 
   <rect width="900" height="320" rx="16" fill="url(#zt-bg)"/>
   <rect x="1" y="1" width="898" height="318" rx="15" fill="none" stroke="#30363d" stroke-width="1"/>
 
-  <!-- Title -->
-  <text x="450" y="36" font-family="'SF Mono', 'Fira Code', Consolas, monospace" font-size="14" fill="#8b949e" text-anchor="middle" letter-spacing="3" opacity="0.6">ZERO-TRUST POSTURE</text>
+  <text x="450" y="36" font-family="'SF Mono','Fira Code',Consolas,monospace" font-size="14" fill="#8b949e" text-anchor="middle" letter-spacing="3" opacity="0.6">ZERO-TRUST POSTURE</text>
 
-  <!-- ═══════ PRINCIPLE 1: NEVER TRUST ═══════ -->
+  <!-- NEVER TRUST -->
   <g transform="translate(40, 55)">
-    <!-- Shield icon -->
-    <path d="M20 0 L37 8 L37 24 C37 36 30 42 20 46 C10 42 3 36 3 24 L3 8 Z"
-          fill="none" stroke="#ff7b72" stroke-width="1.5" opacity="0.7">
-      <animate attributeName="opacity" values="0.5;0.9;0.5" dur="3s" repeatCount="indefinite"/>
-    </path>
-    <text x="18" y="28" font-family="'SF Mono', Consolas, monospace" font-size="14" fill="#ff7b72" text-anchor="middle" font-weight="700">!</text>
-
-    <text x="48" y="16" font-family="'SF Mono', Consolas, monospace" font-size="13" fill="#ff7b72" font-weight="600">Never Trust, Always Verify</text>
-
-    <text x="48" y="36" font-family="'SF Mono', Consolas, monospace" font-size="10" fill="#8b949e">HMAC-SHA256 on every webhook &middot; timing-safe comparison</text>
-    <text x="48" y="50" font-family="'SF Mono', Consolas, monospace" font-size="10" fill="#8b949e">No unsigned request reaches a handler &middot; ever</text>
-
-    <!-- Animated verification check -->
+    <path d="M20 0 L37 8 L37 24 C37 36 30 42 20 46 C10 42 3 36 3 24 L3 8 Z" fill="none" stroke="#ff7b72" stroke-width="1.5" class="icon-pulse"/>
+    <text x="18" y="28" font-family="'SF Mono',Consolas,monospace" font-size="14" fill="#ff7b72" text-anchor="middle" font-weight="700">!</text>
+    <text x="48" y="16" font-family="'SF Mono',Consolas,monospace" font-size="13" fill="#ff7b72" font-weight="600">Never Trust, Always Verify</text>
+    <text x="48" y="36" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#8b949e">HMAC-SHA256 on every webhook · timing-safe comparison</text>
+    <text x="48" y="50" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#8b949e">No unsigned request reaches a handler · ever</text>
     <g transform="translate(360, 8)">
       <rect width="60" height="22" rx="4" fill="#ff7b7210" stroke="#ff7b72" stroke-width="0.5"/>
-      <text x="30" y="15" font-family="'SF Mono', Consolas, monospace" font-size="9" fill="#ff7b72" text-anchor="middle">VERIFY</text>
-      <rect x="-2" y="-2" width="64" height="26" rx="6" fill="none" stroke="#ff7b72" opacity="0">
-        <animate attributeName="opacity" values="0;0.5;0" dur="2s" repeatCount="indefinite"/>
-      </rect>
+      <text x="30" y="15" font-family="'SF Mono',Consolas,monospace" font-size="9" fill="#ff7b72" text-anchor="middle">VERIFY</text>
+      <rect x="-2" y="-2" width="64" height="26" rx="6" fill="none" stroke="#ff7b72" class="bp1"/>
     </g>
   </g>
 
-  <!-- Divider -->
   <line x1="40" y1="115" x2="860" y2="115" stroke="#21262d" stroke-width="1"/>
 
-  <!-- ═══════ PRINCIPLE 2: ASSUME BREACH ═══════ -->
+  <!-- ASSUME BREACH -->
   <g transform="translate(40, 125)">
-    <!-- Broken lock icon -->
     <rect x="6" y="20" width="28" height="22" rx="3" fill="none" stroke="#f0883e" stroke-width="1.5" opacity="0.7"/>
     <path d="M12 20 L12 14 C12 6 28 6 28 14" fill="none" stroke="#f0883e" stroke-width="1.5" opacity="0.7" stroke-dasharray="3,2"/>
-    <circle cx="20" cy="31" r="3" fill="#f0883e" opacity="0.6">
-      <animate attributeName="opacity" values="0.4;0.9;0.4" dur="2s" repeatCount="indefinite"/>
-    </circle>
-
-    <text x="48" y="16" font-family="'SF Mono', Consolas, monospace" font-size="13" fill="#f0883e" font-weight="600">Assume Breach</text>
-
-    <text x="48" y="36" font-family="'SF Mono', Consolas, monospace" font-size="10" fill="#8b949e">Secret scanning = compromised. Rotate first, investigate second.</text>
-    <text x="48" y="50" font-family="'SF Mono', Consolas, monospace" font-size="10" fill="#8b949e">Direct pushes to main flagged &middot; fork workflows flagged &middot; dismissals audited</text>
-
-    <!-- Animated alert pulse -->
+    <circle cx="20" cy="31" r="3" fill="#f0883e" class="lock-glow"/>
+    <text x="48" y="16" font-family="'SF Mono',Consolas,monospace" font-size="13" fill="#f0883e" font-weight="600">Assume Breach</text>
+    <text x="48" y="36" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#8b949e">Secret scanning = compromised. Rotate first, investigate second.</text>
+    <text x="48" y="50" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#8b949e">Direct pushes to main flagged · fork workflows flagged · dismissals audited</text>
     <g transform="translate(360, 8)">
       <rect width="72" height="22" rx="4" fill="#f0883e10" stroke="#f0883e" stroke-width="0.5"/>
-      <text x="36" y="15" font-family="'SF Mono', Consolas, monospace" font-size="9" fill="#f0883e" text-anchor="middle">ESCALATE</text>
-      <rect x="-2" y="-2" width="76" height="26" rx="6" fill="none" stroke="#f0883e" opacity="0">
-        <animate attributeName="opacity" values="0;0.5;0" dur="2s" begin="0.5s" repeatCount="indefinite"/>
-      </rect>
+      <text x="36" y="15" font-family="'SF Mono',Consolas,monospace" font-size="9" fill="#f0883e" text-anchor="middle">ESCALATE</text>
+      <rect x="-2" y="-2" width="76" height="26" rx="6" fill="none" stroke="#f0883e" class="bp2"/>
     </g>
   </g>
 
-  <!-- Divider -->
   <line x1="40" y1="185" x2="860" y2="185" stroke="#21262d" stroke-width="1"/>
 
-  <!-- ═══════ PRINCIPLE 3: LEAST PRIVILEGE ═══════ -->
+  <!-- LEAST PRIVILEGE -->
   <g transform="translate(40, 195)">
-    <!-- Key icon -->
     <circle cx="16" cy="20" r="10" fill="none" stroke="#58a6ff" stroke-width="1.5" opacity="0.7"/>
     <line x1="26" y1="20" x2="38" y2="20" stroke="#58a6ff" stroke-width="1.5" opacity="0.7"/>
     <line x1="34" y1="20" x2="34" y2="26" stroke="#58a6ff" stroke-width="1.5" opacity="0.7"/>
-    <circle cx="16" cy="20" r="4" fill="#58a6ff" opacity="0.3">
-      <animate attributeName="r" values="3;5;3" dur="3s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0.2;0.5;0.2" dur="3s" repeatCount="indefinite"/>
-    </circle>
-
-    <text x="48" y="16" font-family="'SF Mono', Consolas, monospace" font-size="13" fill="#58a6ff" font-weight="600">Least Privilege</text>
-
-    <text x="48" y="36" font-family="'SF Mono', Consolas, monospace" font-size="10" fill="#8b949e">GitHub App with minimum scoped permissions &middot; no PATs</text>
-    <text x="48" y="50" font-family="'SF Mono', Consolas, monospace" font-size="10" fill="#8b949e">Installation tokens ~1hr TTL &middot; private key never leaves machine</text>
-
-    <!-- Token timer -->
+    <circle cx="16" cy="20" r="4" fill="#58a6ff" class="lock-glow"/>
+    <text x="48" y="16" font-family="'SF Mono',Consolas,monospace" font-size="13" fill="#58a6ff" font-weight="600">Least Privilege</text>
+    <text x="48" y="36" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#8b949e">GitHub App with minimum scoped permissions · no PATs</text>
+    <text x="48" y="50" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#8b949e">Installation tokens ~1hr TTL · private key never leaves machine</text>
     <g transform="translate(360, 8)">
       <rect width="60" height="22" rx="4" fill="#58a6ff10" stroke="#58a6ff" stroke-width="0.5"/>
-      <text x="30" y="15" font-family="'SF Mono', Consolas, monospace" font-size="9" fill="#58a6ff" text-anchor="middle">~1h TTL</text>
-      <rect x="-2" y="-2" width="64" height="26" rx="6" fill="none" stroke="#58a6ff" opacity="0">
-        <animate attributeName="opacity" values="0;0.5;0" dur="2s" begin="1s" repeatCount="indefinite"/>
-      </rect>
+      <text x="30" y="15" font-family="'SF Mono',Consolas,monospace" font-size="9" fill="#58a6ff" text-anchor="middle">~1h TTL</text>
+      <rect x="-2" y="-2" width="64" height="26" rx="6" fill="none" stroke="#58a6ff" class="bp3"/>
     </g>
   </g>
 
-  <!-- Divider -->
   <line x1="40" y1="255" x2="860" y2="255" stroke="#21262d" stroke-width="1"/>
 
-  <!-- ═══════ PRINCIPLE 4: AUDIT EVERYTHING ═══════ -->
+  <!-- AUDIT EVERYTHING -->
   <g transform="translate(40, 265)">
-    <!-- Log icon -->
     <rect x="4" y="6" width="32" height="36" rx="3" fill="none" stroke="#3fb950" stroke-width="1.5" opacity="0.7"/>
     <line x1="10" y1="16" x2="30" y2="16" stroke="#3fb950" stroke-width="1" opacity="0.4"/>
     <line x1="10" y1="22" x2="26" y2="22" stroke="#3fb950" stroke-width="1" opacity="0.4"/>
     <line x1="10" y1="28" x2="28" y2="28" stroke="#3fb950" stroke-width="1" opacity="0.4"/>
     <line x1="10" y1="34" x2="22" y2="34" stroke="#3fb950" stroke-width="1" opacity="0.4"/>
-    <!-- Writing animation -->
-    <line x1="10" y1="34" x2="10" y2="34" stroke="#3fb950" stroke-width="1.5" opacity="0.8">
-      <animate attributeName="x2" values="10;28;10" dur="3s" repeatCount="indefinite"/>
-    </line>
-
-    <text x="48" y="16" font-family="'SF Mono', Consolas, monospace" font-size="13" fill="#3fb950" font-weight="600">Audit Everything</text>
-
-    <text x="48" y="36" font-family="'SF Mono', Consolas, monospace" font-size="10" fill="#8b949e">All access grants, membership changes, and permission escalations logged</text>
-    <text x="48" y="50" font-family="'SF Mono', Consolas, monospace" font-size="10" fill="#8b949e">Sensitive paths watched: .github/workflows, mcp.json, .env, secrets/</text>
-
-    <!-- Audit badge -->
+    <text x="48" y="16" font-family="'SF Mono',Consolas,monospace" font-size="13" fill="#3fb950" font-weight="600">Audit Everything</text>
+    <text x="48" y="36" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#8b949e">All access grants, membership changes, and permission escalations logged</text>
+    <text x="48" y="50" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#8b949e">Sensitive paths watched: .github/workflows, mcp.json, .env, secrets/</text>
     <g transform="translate(360, 8)">
       <rect width="48" height="22" rx="4" fill="#3fb95010" stroke="#3fb950" stroke-width="0.5"/>
-      <text x="24" y="15" font-family="'SF Mono', Consolas, monospace" font-size="9" fill="#3fb950" text-anchor="middle">LOG</text>
-      <rect x="-2" y="-2" width="52" height="26" rx="6" fill="none" stroke="#3fb950" opacity="0">
-        <animate attributeName="opacity" values="0;0.5;0" dur="2s" begin="1.5s" repeatCount="indefinite"/>
-      </rect>
+      <text x="24" y="15" font-family="'SF Mono',Consolas,monospace" font-size="9" fill="#3fb950" text-anchor="middle">LOG</text>
+      <rect x="-2" y="-2" width="52" height="26" rx="6" fill="none" stroke="#3fb950" class="bp4"/>
     </g>
   </g>
 
-  <!-- Animated scanning line across bottom -->
-  <g clip-path="url(#zt-clip)">
-    <line x1="0" y1="316" x2="100" y2="316" stroke="#58a6ff" stroke-width="2" opacity="0">
-      <animate attributeName="x1" values="-100;900" dur="6s" repeatCount="indefinite"/>
-      <animate attributeName="x2" values="0;1000" dur="6s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0;0.3;0" dur="6s" repeatCount="indefinite"/>
-    </line>
-  </g>
+  <!-- Scanning line -->
+  <line x1="0" y1="316" x2="100" y2="316" stroke="#58a6ff" stroke-width="2" class="scan"/>
 </svg>

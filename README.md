@@ -1,5 +1,5 @@
 <p align="center">
-  <img src=".github/assets/banner.svg" alt="fabric-ctrl" width="100%"/>
+  <img src=".github/assets/banner.svg" alt="fabric-ctrl" width="900"/>
 </p>
 
 <p align="center">
@@ -20,7 +20,7 @@ It is **not** a proxy for the individual fabric app servers. Those handle their 
 ## Architecture
 
 <p align="center">
-  <img src=".github/assets/architecture.svg" alt="Architecture" width="100%"/>
+  <img src=".github/assets/architecture.svg" alt="Architecture" width="900"/>
 </p>
 
 Two entrypoints, one identity:
@@ -35,7 +35,7 @@ Two entrypoints, one identity:
 ## Zero-Trust Posture
 
 <p align="center">
-  <img src=".github/assets/zero-trust.svg" alt="Zero-Trust Posture" width="100%"/>
+  <img src=".github/assets/zero-trust.svg" alt="Zero-Trust Posture" width="900"/>
 </p>
 
 See [`docs/adr/ADR-0001-0004.md`](docs/adr/ADR-0001-0004.md) for the full architectural rationale.
@@ -45,7 +45,7 @@ See [`docs/adr/ADR-0001-0004.md`](docs/adr/ADR-0001-0004.md) for the full archit
 ## Ecosystem
 
 <p align="center">
-  <img src=".github/assets/ecosystem.svg" alt="Ecosystem" width="100%"/>
+  <img src=".github/assets/ecosystem.svg" alt="Ecosystem" width="900"/>
 </p>
 
 `fabric-ctrl` does not proxy the individual app MCP servers. It owns the org layer. The individual apps own their infrastructure domains. The [gateway](https://github.com/git-fabric/gateway) handles routing between them.

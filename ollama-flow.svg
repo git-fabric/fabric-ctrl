@@ -1,0 +1,204 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 580" width="900" height="580" fill="none">
+  <defs>
+    <style>
+      @keyframes flowRight { 0% { stroke-dashoffset: 24; } 100% { stroke-dashoffset: 0; } }
+      @keyframes flowLeft { 0% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 24; } }
+      @keyframes pulse { 0%, 100% { stroke-opacity: 0.4; } 50% { stroke-opacity: 1; } }
+      @keyframes glow { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+      @keyframes typeIn {
+        0% { opacity: 0; }
+        10% { opacity: 1; }
+        100% { opacity: 1; }
+      }
+      @keyframes cursor { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+      @keyframes msgFlow1 { 0%, 15% { opacity: 0; } 16%, 100% { opacity: 1; } }
+      @keyframes msgFlow2 { 0%, 30% { opacity: 0; } 31%, 100% { opacity: 1; } }
+      @keyframes msgFlow3 { 0%, 45% { opacity: 0; } 46%, 100% { opacity: 1; } }
+      @keyframes msgFlow4 { 0%, 60% { opacity: 0; } 61%, 100% { opacity: 1; } }
+      @keyframes msgFlow5 { 0%, 75% { opacity: 0; } 76%, 100% { opacity: 1; } }
+      @keyframes ollamaSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+      @keyframes appPulse1 { 0%, 100% { stroke-opacity: 0.4; } 50% { stroke-opacity: 0.9; } }
+      @keyframes appPulse2 { 0%, 100% { stroke-opacity: 0.4; } 50% { stroke-opacity: 0.9; } }
+      @keyframes appPulse3 { 0%, 100% { stroke-opacity: 0.4; } 50% { stroke-opacity: 0.9; } }
+      @keyframes appPulse4 { 0%, 100% { stroke-opacity: 0.4; } 50% { stroke-opacity: 0.9; } }
+      @keyframes resultPop { 0%, 80% { opacity: 0; transform: scale(0.95); } 85% { opacity: 1; transform: scale(1.02); } 100% { opacity: 1; transform: scale(1); } }
+      .flow-r { stroke-dasharray: 12 12; animation: flowRight 1.5s linear infinite; }
+      .flow-l { stroke-dasharray: 12 12; animation: flowLeft 1.5s linear infinite; }
+      .p1 { animation: appPulse1 3s ease-in-out infinite; }
+      .p2 { animation: appPulse2 3s ease-in-out 0.4s infinite; }
+      .p3 { animation: appPulse3 3s ease-in-out 0.8s infinite; }
+      .p4 { animation: appPulse4 3s ease-in-out 1.2s infinite; }
+      .m1 { animation: msgFlow1 8s ease-in-out infinite; }
+      .m2 { animation: msgFlow2 8s ease-in-out infinite; }
+      .m3 { animation: msgFlow3 8s ease-in-out infinite; }
+      .m4 { animation: msgFlow4 8s ease-in-out infinite; }
+      .m5 { animation: msgFlow5 8s ease-in-out infinite; }
+      .glow { animation: glow 2s ease-in-out infinite; }
+      .blink { animation: cursor 0.8s step-end infinite; }
+      .result { animation: resultPop 8s ease-in-out infinite; }
+    </style>
+    <linearGradient id="bg" x1="0" y1="0" x2="900" y2="580" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" style="stop-color:#0d1117"/>
+      <stop offset="100%" style="stop-color:#161b22"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="900" height="580" rx="16" fill="url(#bg)"/>
+  <rect x="1" y="1" width="898" height="578" rx="15" fill="none" stroke="#30363d" stroke-width="1"/>
+
+  <!-- Grid -->
+  <g opacity="0.03">
+    <line x1="0" y1="100" x2="900" y2="100" stroke="#58a6ff"/>
+    <line x1="0" y1="200" x2="900" y2="200" stroke="#58a6ff"/>
+    <line x1="0" y1="300" x2="900" y2="300" stroke="#58a6ff"/>
+    <line x1="0" y1="400" x2="900" y2="400" stroke="#58a6ff"/>
+    <line x1="0" y1="500" x2="900" y2="500" stroke="#58a6ff"/>
+    <line x1="225" y1="0" x2="225" y2="580" stroke="#58a6ff"/>
+    <line x1="450" y1="0" x2="450" y2="580" stroke="#58a6ff"/>
+    <line x1="675" y1="0" x2="675" y2="580" stroke="#58a6ff"/>
+  </g>
+
+  <!-- Title -->
+  <text x="450" y="32" font-family="'SF Mono','Fira Code',Consolas,monospace" font-size="13" fill="#8b949e" text-anchor="middle" letter-spacing="3" opacity="0.6">OLLAMA INFERENCE FLOW</text>
+  <text x="450" y="50" font-family="'SF Mono','Fira Code',Consolas,monospace" font-size="10" fill="#484f58" text-anchor="middle">"how many pods are running in k3s?"</text>
+
+  <!-- ═══ USER / CHAT ═══ -->
+  <text x="40" y="82" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#484f58" letter-spacing="2">USER</text>
+
+  <rect x="80" y="88" width="220" height="52" rx="10" fill="#0d1117" stroke="#bc8cff" stroke-width="1.5" class="p1"/>
+  <text x="104" y="110" font-family="'SF Mono',Consolas,monospace" font-size="12" fill="#bc8cff" font-weight="600">chat</text>
+  <text x="104" y="126" font-family="'SF Mono',Consolas,monospace" font-size="9" fill="#8b949e">chat_message_send</text>
+
+  <!-- Chat prompt bubble -->
+  <rect x="320" y="88" width="300" height="52" rx="8" fill="#161b22" stroke="#30363d" stroke-width="0.5"/>
+  <text x="336" y="108" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#e6edf3" class="m1">how many pods are running</text>
+  <text x="336" y="122" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#e6edf3" class="m1">in k3s?</text>
+  <rect x="616" y="108" width="2" height="12" fill="#bc8cff" class="blink"/>
+
+  <!-- ═══ OLLAMA (shared) ═══ -->
+  <rect x="660" y="78" width="200" height="72" rx="10" fill="#0d1117" stroke="#f0883e" stroke-width="1.5" class="p2"/>
+  <text x="700" y="104" font-family="'SF Mono',Consolas,monospace" font-size="14" fill="#f0883e" font-weight="700">Ollama</text>
+  <text x="700" y="120" font-family="'SF Mono',Consolas,monospace" font-size="9" fill="#8b949e">qwen2.5-coder:3b</text>
+  <text x="700" y="134" font-family="'SF Mono',Consolas,monospace" font-size="9" fill="#8b949e">nomic-embed-text</text>
+  <!-- Ollama icon ring -->
+  <circle cx="680" cy="114" r="10" fill="none" stroke="#f0883e" stroke-width="1" opacity="0.4"/>
+  <circle cx="680" cy="114" r="6" fill="#f0883e" opacity="0.2"/>
+
+  <!-- Chat -> Ollama line (completions) -->
+  <line x1="300" y1="108" x2="660" y2="108" stroke="#f0883e" stroke-width="1" class="flow-r" opacity="0.6"/>
+  <text x="480" y="100" font-family="'SF Mono',Consolas,monospace" font-size="8" fill="#f0883e" text-anchor="middle" opacity="0.5" class="m1">/api/chat</text>
+
+  <!-- ═══ STEP 1: Chat interprets via Ollama, calls fabric-ctrl ═══ -->
+  <text x="40" y="180" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#484f58" letter-spacing="2">AGGREGATION</text>
+
+  <!-- fabric-ctrl MCP -->
+  <rect x="200" y="190" width="340" height="70" rx="10" fill="#0d1117" stroke="#58a6ff" stroke-width="2" class="p1"/>
+  <text x="224" y="215" font-family="'SF Mono',Consolas,monospace" font-size="14" fill="#58a6ff" font-weight="700">fabric-ctrl</text>
+  <text x="224" y="232" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#8b949e">MCP aggregation plane</text>
+  <text x="224" y="248" font-family="'SF Mono',Consolas,monospace" font-size="9" fill="#484f58">116 tools across 10 apps</text>
+  <!-- Shield icon -->
+  <path d="M500 205 L515 212 L515 226 C515 235 509 241 500 245 C491 241 485 235 485 226 L485 212 Z" fill="none" stroke="#58a6ff" stroke-width="1" opacity="0.5"/>
+
+  <!-- Chat -> fabric-ctrl flow -->
+  <line x1="190" y1="140" x2="350" y2="190" stroke="#bc8cff" stroke-width="1" class="flow-r m2"/>
+  <text x="250" y="168" font-family="'SF Mono',Consolas,monospace" font-size="8" fill="#bc8cff" opacity="0.6" class="m2">k8s_list_pods</text>
+
+  <!-- ═══ STEP 2: fabric-ctrl routes to k8s app ═══ -->
+  <text x="40" y="296" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#484f58" letter-spacing="2">FABRIC APPS</text>
+
+  <!-- k8s app (highlighted) -->
+  <rect x="80" y="310" width="160" height="56" rx="8" fill="#0d1117" stroke="#3fb950" stroke-width="2" class="p1"/>
+  <text x="104" y="334" font-family="'SF Mono',Consolas,monospace" font-size="13" fill="#3fb950" font-weight="600">k8s</text>
+  <text x="104" y="350" font-family="'SF Mono',Consolas,monospace" font-size="9" fill="#8b949e">k8s_list_pods</text>
+  <rect x="78" y="308" width="164" height="60" rx="10" fill="none" stroke="#3fb950" stroke-width="1" class="glow"/>
+
+  <!-- Other apps (dimmed) -->
+  <rect x="260" y="310" width="120" height="56" rx="8" fill="#0d1117" stroke="#3fb950" stroke-width="1" class="p2"/>
+  <text x="280" y="334" font-family="'SF Mono',Consolas,monospace" font-size="11" fill="#3fb950">unifi</text>
+  <text x="280" y="350" font-family="'SF Mono',Consolas,monospace" font-size="8" fill="#484f58">14 tools</text>
+
+  <rect x="400" y="310" width="120" height="56" rx="8" fill="#0d1117" stroke="#3fb950" stroke-width="1" class="p3"/>
+  <text x="420" y="334" font-family="'SF Mono',Consolas,monospace" font-size="11" fill="#3fb950">proxmox</text>
+  <text x="420" y="350" font-family="'SF Mono',Consolas,monospace" font-size="8" fill="#484f58">16 tools</text>
+
+  <rect x="540" y="310" width="120" height="56" rx="8" fill="#0d1117" stroke="#3fb950" stroke-width="1" class="p4"/>
+  <text x="560" y="334" font-family="'SF Mono',Consolas,monospace" font-size="11" fill="#3fb950">sandfly</text>
+  <text x="560" y="350" font-family="'SF Mono',Consolas,monospace" font-size="8" fill="#484f58">12 tools</text>
+
+  <rect x="680" y="310" width="120" height="56" rx="8" fill="#0d1117" stroke="#3fb950" stroke-width="1" opacity="0.5"/>
+  <text x="700" y="334" font-family="'SF Mono',Consolas,monospace" font-size="11" fill="#3fb950" opacity="0.6">+6 more</text>
+  <text x="700" y="350" font-family="'SF Mono',Consolas,monospace" font-size="8" fill="#484f58">cf ts cve git chat aiana</text>
+
+  <!-- fabric-ctrl -> k8s flow -->
+  <line x1="350" y1="260" x2="160" y2="310" stroke="#3fb950" stroke-width="1.5" class="flow-r m3"/>
+  <text x="230" y="282" font-family="'SF Mono',Consolas,monospace" font-size="8" fill="#3fb950" opacity="0.6" class="m3">execute(args)</text>
+
+  <!-- ═══ STEP 3: k8s hits cluster ═══ -->
+  <text x="40" y="404" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#484f58" letter-spacing="2">INFRASTRUCTURE</text>
+
+  <!-- k3s cluster -->
+  <rect x="80" y="414" width="260" height="64" rx="10" fill="#0d1117" stroke="#58a6ff" stroke-width="1" class="p2"/>
+  <text x="104" y="438" font-family="'SF Mono',Consolas,monospace" font-size="12" fill="#58a6ff" font-weight="600">k3s cluster</text>
+  <text x="104" y="454" font-family="'SF Mono',Consolas,monospace" font-size="9" fill="#8b949e">7 nodes · 10.88.145.190-196</text>
+  <text x="104" y="468" font-family="'SF Mono',Consolas,monospace" font-size="9" fill="#484f58">kubeconfig auth</text>
+
+  <!-- k8s -> cluster flow -->
+  <line x1="160" y1="366" x2="160" y2="414" stroke="#58a6ff" stroke-width="1" class="flow-r m3"/>
+
+  <!-- Ollama pod inside cluster -->
+  <rect x="370" y="414" width="180" height="64" rx="10" fill="#0d1117" stroke="#f0883e" stroke-width="1.5" class="p3"/>
+  <text x="394" y="438" font-family="'SF Mono',Consolas,monospace" font-size="11" fill="#f0883e" font-weight="600">ollama pod</text>
+  <text x="394" y="454" font-family="'SF Mono',Consolas,monospace" font-size="9" fill="#8b949e">fabric-sdk namespace</text>
+  <text x="394" y="468" font-family="'SF Mono',Consolas,monospace" font-size="9" fill="#484f58">:11434 ClusterIP</text>
+
+  <!-- Ollama top -> Ollama pod connection -->
+  <line x1="760" y1="150" x2="760" y2="400" stroke="#f0883e" stroke-width="0.5" stroke-dasharray="4 4" opacity="0.3"/>
+  <line x1="760" y1="400" x2="550" y2="446" stroke="#f0883e" stroke-width="0.5" stroke-dasharray="4 4" opacity="0.3"/>
+  <text x="770" y="280" font-family="'SF Mono',Consolas,monospace" font-size="8" fill="#f0883e" opacity="0.4" transform="rotate(90, 770, 280)">same instance</text>
+
+  <!-- Other infra -->
+  <rect x="580" y="414" width="130" height="64" rx="10" fill="#0d1117" stroke="#30363d" stroke-width="1" opacity="0.5"/>
+  <text x="600" y="438" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#8b949e" opacity="0.6">pve01</text>
+  <text x="600" y="454" font-family="'SF Mono',Consolas,monospace" font-size="9" fill="#484f58">proxmox</text>
+
+  <rect x="730" y="414" width="130" height="64" rx="10" fill="#0d1117" stroke="#30363d" stroke-width="1" opacity="0.5"/>
+  <text x="750" y="438" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#8b949e" opacity="0.6">UDM Pro</text>
+  <text x="750" y="454" font-family="'SF Mono',Consolas,monospace" font-size="9" fill="#484f58">unifi</text>
+
+  <!-- ═══ STEP 4: Response flows back ═══ -->
+  <text x="40" y="510" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#484f58" letter-spacing="2">RESPONSE</text>
+
+  <!-- Result bubble -->
+  <rect x="80" y="520" width="500" height="44" rx="8" fill="#161b22" stroke="#3fb950" stroke-width="1" class="result"/>
+  <text x="100" y="540" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#3fb950" class="result">42 pods running across 7 nodes in the k3s cluster</text>
+  <text x="100" y="554" font-family="'SF Mono',Consolas,monospace" font-size="9" fill="#484f58" class="result">namespace: default(12) fabric-sdk(8) sandfly(3) kube-system(19)</text>
+
+  <!-- Return flow arrows -->
+  <line x1="160" y1="478" x2="160" y2="520" stroke="#3fb950" stroke-width="1" class="flow-l m4" opacity="0.5"/>
+  <line x1="160" y1="520" x2="160" y2="540" stroke="#3fb950" stroke-width="0.5" opacity="0.3"/>
+
+  <!-- Sequence numbers -->
+  <g class="m1">
+    <circle cx="55" cy="114" r="10" fill="#bc8cff" opacity="0.15"/>
+    <text x="55" y="118" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#bc8cff" text-anchor="middle" font-weight="700">1</text>
+  </g>
+  <g class="m2">
+    <circle cx="55" cy="225" r="10" fill="#58a6ff" opacity="0.15"/>
+    <text x="55" y="229" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#58a6ff" text-anchor="middle" font-weight="700">2</text>
+  </g>
+  <g class="m3">
+    <circle cx="55" cy="338" r="10" fill="#3fb950" opacity="0.15"/>
+    <text x="55" y="342" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#3fb950" text-anchor="middle" font-weight="700">3</text>
+  </g>
+  <g class="m4">
+    <circle cx="55" cy="446" r="10" fill="#58a6ff" opacity="0.15"/>
+    <text x="55" y="450" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#58a6ff" text-anchor="middle" font-weight="700">4</text>
+  </g>
+  <g class="m5">
+    <circle cx="55" cy="542" r="10" fill="#3fb950" opacity="0.15"/>
+    <text x="55" y="546" font-family="'SF Mono',Consolas,monospace" font-size="10" fill="#3fb950" text-anchor="middle" font-weight="700">5</text>
+  </g>
+
+  <!-- Step labels (right side) -->
+  <text x="636" y="542" font-family="'SF Mono',Consolas,monospace" font-size="9" fill="#484f58" class="result">local inference · zero API cost · no tokens leave the network</text>
+</svg>

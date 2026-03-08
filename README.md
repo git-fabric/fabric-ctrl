@@ -52,6 +52,16 @@ See [`docs/adr/ADR-0001-0004.md`](docs/adr/ADR-0001-0004.md) for the full archit
 
 ---
 
+## Ollama Inference Flow
+
+<p align="center">
+  <img src="ollama-flow.svg" alt="Ollama Inference Flow" width="900"/>
+</p>
+
+All inference stays local. Chat and Aiana use the shared Ollama instance running in the k3s cluster — no API tokens leave the network. `fabric-ctrl` routes tool calls to the appropriate fabric app, which hits the infrastructure directly.
+
+---
+
 ## Setup
 
 ### 1. Register the GitHub App

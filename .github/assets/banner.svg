@@ -1,0 +1,162 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 200" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="900" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#161b22"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#58a6ff"/>
+      <stop offset="50%" stop-color="#bc8cff"/>
+      <stop offset="100%" stop-color="#ff7b72"/>
+    </linearGradient>
+    <linearGradient id="shield-fill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#58a6ff"/>
+      <stop offset="100%" stop-color="#388bfd"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-strong">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <clipPath id="banner-clip">
+      <rect x="2" y="2" width="896" height="196" rx="14"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="200" rx="16" fill="url(#bg)"/>
+  <rect x="1" y="1" width="898" height="198" rx="15" fill="none" stroke="#30363d" stroke-width="1"/>
+
+  <!-- Animated grid lines -->
+  <g clip-path="url(#banner-clip)" opacity="0.06">
+    <line x1="0" y1="0" x2="0" y2="200" stroke="#58a6ff" stroke-width="1">
+      <animate attributeName="x1" values="0;900;0" dur="20s" repeatCount="indefinite"/>
+      <animate attributeName="x2" values="0;900;0" dur="20s" repeatCount="indefinite"/>
+    </line>
+    <line x1="0" y1="0" x2="900" y2="0" stroke="#58a6ff" stroke-width="1">
+      <animate attributeName="y1" values="0;200;0" dur="15s" repeatCount="indefinite"/>
+      <animate attributeName="y2" values="0;200;0" dur="15s" repeatCount="indefinite"/>
+    </line>
+  </g>
+
+  <!-- Animated particles -->
+  <g clip-path="url(#banner-clip)">
+    <circle r="1.5" fill="#58a6ff" opacity="0.4">
+      <animate attributeName="cx" values="100;800;100" dur="12s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="30;170;30" dur="8s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="1" fill="#bc8cff" opacity="0.3">
+      <animate attributeName="cx" values="700;200;700" dur="10s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="160;40;160" dur="14s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="1.5" fill="#ff7b72" opacity="0.3">
+      <animate attributeName="cx" values="400;100;800;400" dur="16s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="100;50;150;100" dur="11s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="1" fill="#58a6ff" opacity="0.2">
+      <animate attributeName="cx" values="250;650;250" dur="9s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="80;120;80" dur="7s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Shield icon -->
+  <g transform="translate(80, 58)" filter="url(#glow)">
+    <path d="M40 0 L75 15 L75 45 C75 68 60 82 40 90 C20 82 5 68 5 45 L5 15 Z"
+          fill="url(#shield-fill)" opacity="0.15" stroke="#58a6ff" stroke-width="1.5">
+      <animate attributeName="opacity" values="0.15;0.25;0.15" dur="3s" repeatCount="indefinite"/>
+    </path>
+    <path d="M40 8 L70 20 L70 45 C70 64 57 76 40 83 C23 76 10 64 10 45 L10 20 Z"
+          fill="none" stroke="#58a6ff" stroke-width="1.5" opacity="0.6"/>
+    <!-- Lock icon inside shield -->
+    <rect x="28" y="38" width="24" height="18" rx="3" fill="none" stroke="#58a6ff" stroke-width="1.5" opacity="0.8"/>
+    <path d="M33 38 L33 30 C33 24 47 24 47 30 L47 38" fill="none" stroke="#58a6ff" stroke-width="1.5" opacity="0.8"/>
+    <circle cx="40" cy="48" r="2.5" fill="#58a6ff" opacity="0.9"/>
+
+    <!-- Shield pulse ring -->
+    <path d="M40 0 L75 15 L75 45 C75 68 60 82 40 90 C20 82 5 68 5 45 L5 15 Z"
+          fill="none" stroke="#58a6ff" stroke-width="1" opacity="0">
+      <animate attributeName="opacity" values="0;0.4;0" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-width" values="1;4;1" dur="3s" repeatCount="indefinite"/>
+    </path>
+  </g>
+
+  <!-- Title text -->
+  <g filter="url(#glow)">
+    <text x="195" y="95" font-family="'SF Mono', 'Fira Code', 'JetBrains Mono', Consolas, monospace"
+          font-size="52" font-weight="700" fill="#e6edf3" letter-spacing="-1">
+      fabric-ctrl
+    </text>
+  </g>
+
+  <!-- Subtitle -->
+  <text x="195" y="130" font-family="'SF Mono', 'Fira Code', 'JetBrains Mono', Consolas, monospace"
+        font-size="16" fill="#8b949e" letter-spacing="0.5">
+    zero-trust control plane for git-fabric
+  </text>
+
+  <!-- Animated status badges -->
+  <g transform="translate(195, 145)">
+    <!-- MCP badge -->
+    <rect x="0" y="0" width="56" height="22" rx="11" fill="#388bfd" opacity="0.15" stroke="#388bfd" stroke-width="0.5"/>
+    <text x="28" y="15" font-family="'SF Mono', Consolas, monospace" font-size="10" fill="#58a6ff" text-anchor="middle">MCP</text>
+
+    <!-- Webhooks badge -->
+    <rect x="66" y="0" width="80" height="22" rx="11" fill="#388bfd" opacity="0.15" stroke="#388bfd" stroke-width="0.5"/>
+    <text x="106" y="15" font-family="'SF Mono', Consolas, monospace" font-size="10" fill="#58a6ff" text-anchor="middle">Webhooks</text>
+
+    <!-- Zero-Trust badge -->
+    <rect x="156" y="0" width="88" height="22" rx="11" fill="#f0883e" opacity="0.15" stroke="#f0883e" stroke-width="0.5"/>
+    <text x="200" y="15" font-family="'SF Mono', Consolas, monospace" font-size="10" fill="#f0883e" text-anchor="middle">Zero-Trust</text>
+
+    <!-- GitHub App badge -->
+    <rect x="254" y="0" width="92" height="22" rx="11" fill="#bc8cff" opacity="0.15" stroke="#bc8cff" stroke-width="0.5"/>
+    <text x="300" y="15" font-family="'SF Mono', Consolas, monospace" font-size="10" fill="#bc8cff" text-anchor="middle">GitHub App</text>
+  </g>
+
+  <!-- Animated connection lines on right side -->
+  <g transform="translate(680, 30)" opacity="0.3">
+    <!-- Vertical spine -->
+    <line x1="40" y1="0" x2="40" y2="140" stroke="#30363d" stroke-width="1"/>
+
+    <!-- Nodes -->
+    <circle cx="40" cy="20" r="4" fill="#0d1117" stroke="#58a6ff" stroke-width="1.5">
+      <animate attributeName="r" values="4;5;4" dur="2s" begin="0s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="40" cy="50" r="4" fill="#0d1117" stroke="#bc8cff" stroke-width="1.5">
+      <animate attributeName="r" values="4;5;4" dur="2s" begin="0.4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="40" cy="80" r="4" fill="#0d1117" stroke="#ff7b72" stroke-width="1.5">
+      <animate attributeName="r" values="4;5;4" dur="2s" begin="0.8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="40" cy="110" r="4" fill="#0d1117" stroke="#3fb950" stroke-width="1.5">
+      <animate attributeName="r" values="4;5;4" dur="2s" begin="1.2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="40" cy="140" r="4" fill="#0d1117" stroke="#f0883e" stroke-width="1.5">
+      <animate attributeName="r" values="4;5;4" dur="2s" begin="1.6s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Horizontal branches -->
+    <line x1="44" y1="20" x2="80" y2="20" stroke="#58a6ff" stroke-width="1" opacity="0.5"/>
+    <line x1="44" y1="50" x2="80" y2="50" stroke="#bc8cff" stroke-width="1" opacity="0.5"/>
+    <line x1="44" y1="80" x2="80" y2="80" stroke="#ff7b72" stroke-width="1" opacity="0.5"/>
+    <line x1="44" y1="110" x2="80" y2="110" stroke="#3fb950" stroke-width="1" opacity="0.5"/>
+    <line x1="44" y1="140" x2="80" y2="140" stroke="#f0883e" stroke-width="1" opacity="0.5"/>
+
+    <!-- Labels -->
+    <text x="86" y="24" font-family="'SF Mono', Consolas, monospace" font-size="9" fill="#58a6ff" opacity="0.7">push</text>
+    <text x="86" y="54" font-family="'SF Mono', Consolas, monospace" font-size="9" fill="#bc8cff" opacity="0.7">scan</text>
+    <text x="86" y="84" font-family="'SF Mono', Consolas, monospace" font-size="9" fill="#ff7b72" opacity="0.7">vuln</text>
+    <text x="86" y="114" font-family="'SF Mono', Consolas, monospace" font-size="9" fill="#3fb950" opacity="0.7">audit</text>
+    <text x="86" y="144" font-family="'SF Mono', Consolas, monospace" font-size="9" fill="#f0883e" opacity="0.7">deps</text>
+
+    <!-- Data flow pulse -->
+    <circle r="2" fill="#58a6ff" opacity="0">
+      <animate attributeName="cy" values="0;140" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="cx" values="40;40" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.8;0" dur="2s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+</svg>

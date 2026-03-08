@@ -1,8 +1,17 @@
-# fabric-ctrl
+<p align="center">
+  <img src=".github/assets/banner.svg" alt="fabric-ctrl" width="100%"/>
+</p>
 
-> Zero-trust control plane for the [git-fabric](https://github.com/git-fabric) org.
+<p align="center">
+  <a href="https://github.com/git-fabric/fabric-ctrl/releases"><img src="https://img.shields.io/github/v/release/git-fabric/fabric-ctrl?style=flat-square&color=58a6ff&label=version" alt="Version"/></a>
+  <a href="https://github.com/git-fabric/fabric-ctrl/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-8b949e?style=flat-square" alt="License"/></a>
+  <a href="https://github.com/git-fabric"><img src="https://img.shields.io/badge/org-git--fabric-3fb950?style=flat-square" alt="git-fabric"/></a>
+  <a href="docs/adr/ADR-0001-0004.md"><img src="https://img.shields.io/badge/posture-zero--trust-ff7b72?style=flat-square" alt="Zero Trust"/></a>
+</p>
 
-`fabric-ctrl` is the lynchpin of the git-fabric ecosystem. It authenticates as a GitHub App — giving it a machine identity with scoped, short-lived tokens across every repo in the org. Everything flows through it: security events, Dependabot alerts, secret scanning, audit logs, and org-level MCP tooling.
+---
+
+`fabric-ctrl` is the lynchpin of the [git-fabric](https://github.com/git-fabric) ecosystem. It authenticates as a **GitHub App** — giving it a machine identity with scoped, short-lived tokens across every repo in the org. Everything flows through it: security events, Dependabot alerts, secret scanning, audit logs, and org-level MCP tooling.
 
 It is **not** a proxy for the individual fabric app servers. Those handle their own domains (`unifi`, `proxmox`, `k8s`, `sandfly`, etc.). `fabric-ctrl` owns the **org layer** — the GitHub security surface and the control plane that sits above all of them.
 
@@ -10,30 +19,9 @@ It is **not** a proxy for the individual fabric app servers. Those handle their 
 
 ## Architecture
 
-```
-Claude Desktop / git-steer / cortex
-         │
-         ▼
-  fabric-ctrl (MCP server)          ← org__* tools via GitHub App
-         │
-  fabric-ctrl (webhook server)      ← push, PR, security, dependabot, audit
-         │
-  GitHub App: fabric-security
-         │
-         └── installed on git-fabric org
-                  │
-                  ├── git-fabric/unifi
-                  ├── git-fabric/proxmox
-                  ├── git-fabric/k8s
-                  ├── git-fabric/sandfly
-                  ├── git-fabric/cloudflare
-                  ├── git-fabric/tailscale
-                  ├── git-fabric/cve
-                  ├── git-fabric/git
-                  ├── git-fabric/chat
-                  ├── git-fabric/gateway
-                  └── ...
-```
+<p align="center">
+  <img src=".github/assets/architecture.svg" alt="Architecture" width="100%"/>
+</p>
 
 Two entrypoints, one identity:
 
@@ -46,15 +34,21 @@ Two entrypoints, one identity:
 
 ## Zero-Trust Posture
 
-- **No PATs.** All auth is derived from the GitHub App identity via short-lived installation tokens (~1hr TTL).
-- **Every webhook is HMAC-SHA256 verified** before any handler runs. Timing-safe comparison. No exceptions.
-- **Secret scanning alerts = assumed compromise.** Rotation first, investigation second.
-- **Direct pushes to `main` are flagged** regardless of actor.
-- **Auto-dismissed Dependabot alerts are audited** — dismissal is never silent.
-- **Fork-triggered workflows are flagged** as potential exfiltration vectors.
-- **Sensitive paths are watched** — `.github/workflows`, `mcp.json`, `.env`, `secrets/`.
+<p align="center">
+  <img src=".github/assets/zero-trust.svg" alt="Zero-Trust Posture" width="100%"/>
+</p>
 
 See [`docs/adr/ADR-0001-0004.md`](docs/adr/ADR-0001-0004.md) for the full architectural rationale.
+
+---
+
+## Ecosystem
+
+<p align="center">
+  <img src=".github/assets/ecosystem.svg" alt="Ecosystem" width="100%"/>
+</p>
+
+`fabric-ctrl` does not proxy the individual app MCP servers. It owns the org layer. The individual apps own their infrastructure domains. The [gateway](https://github.com/git-fabric/gateway) handles routing between them.
 
 ---
 
@@ -64,9 +58,9 @@ See [`docs/adr/ADR-0001-0004.md`](docs/adr/ADR-0001-0004.md) for the full archit
 
 Go to: `https://github.com/organizations/git-fabric/settings/apps/new`
 
-**App name:** `fabric-security`  
-**Homepage URL:** `https://github.com/git-fabric/fabric-ctrl`  
-**Webhook URL:** Your public endpoint (e.g. `https://fabric-ctrl.yourdomain.com/webhooks/github`)  
+**App name:** `fabric-security`
+**Homepage URL:** `https://github.com/git-fabric/fabric-ctrl`
+**Webhook URL:** Your public endpoint (e.g. `https://fabric-ctrl.yourdomain.com/webhooks/github`)
 **Webhook secret:** Generate a strong random secret — you'll need it in `.env`
 
 **Permissions:**
@@ -82,15 +76,7 @@ Go to: `https://github.com/organizations/git-fabric/settings/apps/new`
 | Organization: Administration | Read |
 
 **Subscribe to events:**
-- `push`
-- `pull_request`
-- `code_scanning_alert`
-- `secret_scanning_alert`
-- `repository_vulnerability_alert`
-- `dependabot_alert`
-- `member`
-- `organization`
-- `workflow_run`
+`push` `pull_request` `code_scanning_alert` `secret_scanning_alert` `repository_vulnerability_alert` `dependabot_alert` `member` `organization` `workflow_run`
 
 ### 2. Install the App on the org
 
@@ -123,8 +109,6 @@ npm run dev:mcp
 
 ## MCP Tools
 
-Point your MCP host at `mcp.json` or run the server directly.
-
 | Tool | Description |
 |---|---|
 | `org__list_repos` | List all repos in the git-fabric org |
@@ -132,22 +116,22 @@ Point your MCP host at `mcp.json` or run the server directly.
 | `org__list_members` | List org members by role |
 | `org__get_audit_log` | Fetch org audit log entries |
 
-More tools are added as the org's needs grow. All tools use the App identity — no credentials accepted as input.
+All tools use the App identity — no credentials accepted as input.
 
 ---
 
-## Webhook Events Handled
+## Webhook Events
 
 | Event | Handler | ZT Behavior |
 |---|---|---|
-| `push` | `handlers/push.ts` | Flags direct-to-main, sensitive path changes |
-| `code_scanning_alert` | `handlers/security-alert.ts` | Escalates critical alerts immediately |
-| `secret_scanning_alert` | `handlers/security-alert.ts` | Treats all detections as compromised |
-| `repository_vulnerability_alert` | `handlers/security-alert.ts` | Routes to CVE triage pipeline |
-| `dependabot_alert` | `handlers/dependabot.ts` | Escalates critical/high, queues medium/low |
-| `member` | `handlers/audit.ts` | Logs all access grants |
-| `organization` | `handlers/audit.ts` | Flags membership changes |
-| `workflow_run` | `handlers/audit.ts` | Flags fork-triggered workflows |
+| `push` | `push.ts` | Flags direct-to-main, sensitive path changes |
+| `code_scanning_alert` | `security-alert.ts` | Escalates critical alerts immediately |
+| `secret_scanning_alert` | `security-alert.ts` | Treats all detections as compromised |
+| `repository_vulnerability_alert` | `security-alert.ts` | Routes to CVE triage pipeline |
+| `dependabot_alert` | `dependabot.ts` | Escalates critical/high, queues medium/low |
+| `member` | `audit.ts` | Logs all access grants |
+| `organization` | `audit.ts` | Flags membership changes |
+| `workflow_run` | `audit.ts` | Flags fork-triggered workflows |
 
 ---
 
@@ -156,52 +140,30 @@ More tools are added as the org's needs grow. All tools use the App identity —
 ```
 fabric-ctrl/
 ├── src/
-│   ├── app/                    # GitHub App webhook server
-│   │   ├── index.ts            # Hono server, event dispatch
-│   │   ├── auth.ts             # App JWT + installation token
-│   │   ├── handlers/           # Typed event handlers
+│   ├── app/                          # GitHub App webhook server
+│   │   ├── index.ts                  # Hono server, event dispatch
+│   │   ├── auth.ts                   # App JWT + installation token
+│   │   ├── handlers/                 # Typed event handlers
 │   │   │   ├── push.ts
 │   │   │   ├── security-alert.ts
 │   │   │   ├── dependabot.ts
 │   │   │   └── audit.ts
 │   │   └── middleware/
 │   │       └── verify-signature.ts   # HMAC-SHA256 webhook verification
-│   └── mcp/                    # MCP server
-│       ├── index.ts            # stdio MCP server
+│   └── mcp/                          # MCP server
+│       ├── index.ts                  # stdio MCP server
 │       └── tools/
-│           └── org.ts          # org__* tools
-├── docs/
-│   └── adr/
-│       └── ADR-0001-0004.md    # Architectural decision records
-├── secrets/                    # gitignored — private key lives here
+│           └── org.ts                # org__* tools
+├── docs/adr/                         # Architectural decision records
+├── secrets/                          # gitignored — private key lives here
 ├── .env.example
-├── mcp.json                    # Claude Desktop config
+├── mcp.json                          # Claude Desktop config
 ├── package.json
 └── tsconfig.json
 ```
 
 ---
 
-## Relation to the git-fabric Ecosystem
-
-```
-Consumers
-  git-steer    →  uses fabric-ctrl MCP tools for org-level ops
-  cortex       →  uses fabric-ctrl MCP tools for org visibility
-  Claude       →  uses fabric-ctrl MCP tools interactively
-
-fabric-ctrl
-  ↑ installs on
-git-fabric org
-  ├── git-fabric/cve       ← Dependabot/CVE alerts routed here
-  ├── git-fabric/k8s       ← k3s operations (own MCP server)
-  ├── git-fabric/unifi     ← UniFi operations (own MCP server)
-  ├── git-fabric/proxmox   ← Proxmox operations (own MCP server)
-  └── ...                  ← each app owns its domain
-```
-
-`fabric-ctrl` does not proxy the individual app MCP servers. It owns the org layer. The individual apps own their infrastructure domains. The gateway (`git-fabric/gateway`) handles routing between them.
-
----
-
-Built by [ry-ops](https://github.com/ry-ops). Part of [git-fabric](https://github.com/git-fabric).
+<p align="center">
+  <sub>Built by <a href="https://github.com/ry-ops">ry-ops</a>. Part of <a href="https://github.com/git-fabric">git-fabric</a>.</sub>
+</p>

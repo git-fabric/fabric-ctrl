@@ -17,6 +17,8 @@ import {
   handleOrganization,
   handleWorkflowRun,
 } from "./handlers/audit.js";
+import { handleInvoke, handleStatus } from "../invoke/index.js";
+import type { InvokeRequest } from "../invoke/types.js";
 
 /**
  * app/index.ts — fabric-ctrl GitHub App webhook server
@@ -71,6 +73,19 @@ app.post(
 
 // Health check — no auth required, no sensitive data
 app.get("/health", (c) => c.json({ status: "ok", service: "fabric-ctrl" }));
+
+// fabric-invoke — orchestration runtime endpoint
+app.post("/invoke", async (c) => {
+  const body = (await c.req.json()) as InvokeRequest;
+  const result = await handleInvoke(body);
+  return c.json(result);
+});
+
+// fabric-invoke status — loaded models, dependency health
+app.get("/invoke/status", async (c) => {
+  const status = await handleStatus();
+  return c.json(status);
+});
 
 const port = Number(process.env.WEBHOOK_PORT ?? 3000);
 

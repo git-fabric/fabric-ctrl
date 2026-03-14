@@ -10,6 +10,8 @@ import { zodToJsonSchema } from "zod-to-json-schema";
 
 import { loadApps } from "./loader.js";
 import { orgTools } from "./tools/org.js";
+import { handleInvoke, handleStatus } from "../invoke/index.js";
+import type { InvokeRequest } from "../invoke/types.js";
 
 /**
  * mcp/index.ts — fabric-ctrl aggregation plane
@@ -69,6 +71,39 @@ const BUILTIN_TOOLS = [
       "List all registered fabric apps and their tools.",
     inputSchema: { type: "object" as const, properties: {} },
   },
+  {
+    name: "fabric_invoke",
+    description:
+      "Route a query through the fabric-sdk specialist model pool. Automatically selects the correct specialist agent(s), executes multi-step sequences, recalls AIANA context, and records the outcome.",
+    inputSchema: {
+      type: "object" as const,
+      properties: {
+        query: { type: "string", description: "The natural language query or task" },
+        project: { type: "string", description: "AIANA project scope (e.g. 'stackforge', 'git-steer')" },
+        dry_run: { type: "boolean", description: "Return routing decision only, no execution (default: false)" },
+        record: { type: "boolean", description: "Record outcome to AIANA (default: true)" },
+      },
+      required: ["query"],
+    },
+  },
+  {
+    name: "fabric_route",
+    description:
+      "Get the routing decision for a query without executing it. Equivalent to fabric_invoke with dry_run: true.",
+    inputSchema: {
+      type: "object" as const,
+      properties: {
+        query: { type: "string", description: "The natural language query or task" },
+      },
+      required: ["query"],
+    },
+  },
+  {
+    name: "fabric_status",
+    description:
+      "Health check — which Ollama models are loaded, AIANA reachable, gateway registered.",
+    inputSchema: { type: "object" as const, properties: {} },
+  },
 ];
 
 // ── List tools ──────────────────────────────────────────────────────────────
@@ -114,6 +149,56 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     }
     return {
       content: [{ type: "text", text: JSON.stringify(results, null, 2) }],
+    };
+  }
+
+  // Built-in: fabric_invoke
+  if (name === "fabric_invoke") {
+    try {
+      const req: InvokeRequest = {
+        query: (args as any).query,
+        project: (args as any).project,
+        dry_run: (args as any).dry_run,
+        record: (args as any).record,
+      };
+      const result = await handleInvoke(req);
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+      };
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      return {
+        content: [{ type: "text", text: `fabric_invoke error: ${message}` }],
+        isError: true,
+      };
+    }
+  }
+
+  // Built-in: fabric_route
+  if (name === "fabric_route") {
+    try {
+      const req: InvokeRequest = {
+        query: (args as any).query,
+        dry_run: true,
+      };
+      const result = await handleInvoke(req);
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+      };
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      return {
+        content: [{ type: "text", text: `fabric_route error: ${message}` }],
+        isError: true,
+      };
+    }
+  }
+
+  // Built-in: fabric_status
+  if (name === "fabric_status") {
+    const status = await handleStatus();
+    return {
+      content: [{ type: "text", text: JSON.stringify(status, null, 2) }],
     };
   }
 

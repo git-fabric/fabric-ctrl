@@ -1,21 +1,35 @@
 /**
- * invoke/dispatcher.ts — Ollama REST API dispatch for specialist models
+ * invoke/dispatcher.ts — Ollama REST API dispatch + Claude API fallback
  */
 
+import Anthropic from "@anthropic-ai/sdk";
 import { MODEL_REGISTRY } from "./types.js";
 
 const OLLAMA_ENDPOINT = process.env.OLLAMA_ENDPOINT ?? "http://localhost:11434";
 const SPECIALIST_TIMEOUT_MS = Number(process.env.SPECIALIST_TIMEOUT_MS ?? 30000);
 const ROUTER_TIMEOUT_MS = Number(process.env.ROUTER_TIMEOUT_MS ?? 10000);
 
+let _anthropic: Anthropic | null = null;
+
+function getAnthropic(): Anthropic {
+  if (!_anthropic) _anthropic = new Anthropic();
+  return _anthropic;
+}
+
 /**
  * Call an Ollama model via the /api/generate REST endpoint.
- * Returns the model's text response.
+ * Returns the model's text response, or null on failure.
  */
 export async function callModel(
   agent: string,
   prompt: string,
 ): Promise<{ response: string; duration_ms: number }> {
+  if (agent === "__claude__") {
+    const start = Date.now();
+    const response = await callClaude(prompt);
+    return { response, duration_ms: Date.now() - start };
+  }
+
   const entry = MODEL_REGISTRY[agent];
   const model = entry?.model ?? agent;
   const temperature = entry?.temperature ?? 0.15;
@@ -43,6 +57,37 @@ export async function callModel(
 
   const data = (await res.json()) as { response: string };
   return { response: data.response, duration_ms: Date.now() - start };
+}
+
+/**
+ * Claude API fallback — called when:
+ *   1. fabric-router output can't be parsed (unknown agent)
+ *   2. fabric-router itself times out
+ *   3. All specialist models fail/timeout for a query
+ *
+ * Prepends a brief preamble so Claude knows it's receiving an escalation.
+ */
+export async function callClaude(prompt: string): Promise<string> {
+  console.warn("[dispatcher] Escalating to Claude API (route of last resort)");
+
+  const preamble = [
+    "You are receiving this query as a fallback because the fabric-sdk local",
+    "specialist models were unavailable or could not route this request.",
+    "Answer as helpfully as possible with full context.",
+    "---",
+    "",
+  ].join("\n");
+
+  const msg = await getAnthropic().messages.create({
+    model: "claude-sonnet-4-20250514",
+    max_tokens: 2048,
+    messages: [{ role: "user", content: preamble + prompt }],
+  });
+
+  return msg.content
+    .filter((b) => b.type === "text")
+    .map((b) => (b as { type: "text"; text: string }).text)
+    .join("\n");
 }
 
 /**

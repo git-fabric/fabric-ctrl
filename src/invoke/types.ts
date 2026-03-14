@@ -16,12 +16,13 @@ export interface RouteDecision {
   sequence: string | null;
   reason: string;
   context_pass: string;
+  escalated_to_claude: boolean;
 }
 
 export interface Step {
   step: number;
   agent: string;
-  type: "recall" | "specialist" | "record";
+  type: "recall" | "specialist" | "record" | "escalation";
   output: string;
   duration_ms: number;
 }
@@ -64,3 +65,6 @@ export const MODEL_REGISTRY: Record<string, { model: string; temperature: number
   "aiana-ops":         { model: "aiana-ops",         temperature: 0.15 },
   "qdrant-fabric-ops": { model: "qdrant-fabric-ops", temperature: 0.15 },
 };
+
+/** Set of valid agent names for validation */
+export const VALID_AGENTS = new Set(Object.keys(MODEL_REGISTRY));

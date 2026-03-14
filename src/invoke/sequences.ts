@@ -2,14 +2,15 @@
  * invoke/sequences.ts — Embedded sequence registry (SEQ-01 through SEQ-06)
  *
  * Mirrors fabric-router's routing table. Each sequence defines an ordered
- * list of agents to execute. Conditional steps (marked conditional: true)
- * are skipped if the routing context makes them irrelevant.
+ * list of agents to execute. Conditional steps include a predicate function
+ * that evaluates against the original query and prior context.
  */
 
 export interface SequenceStep {
   agent: string;
   type: "recall" | "specialist" | "record";
-  conditional?: boolean;
+  /** If set, step only runs when predicate returns true */
+  condition?: (query: string, priorContext: string) => boolean;
 }
 
 export interface Sequence {
@@ -50,7 +51,11 @@ export const SEQUENCES: Record<string, Sequence> = {
     steps: [
       { agent: "git-steer-ops",   type: "specialist" },
       { agent: "github-ops",      type: "specialist" },
-      { agent: "cloudflare-ops",  type: "specialist", conditional: true },
+      {
+        agent: "cloudflare-ops",
+        type: "specialist",
+        condition: (query) => /pages|static\s*site|blog|deploy|cloudflare/i.test(query),
+      },
       { agent: "aiana-ops",       type: "record" },
     ],
   },
@@ -75,7 +80,11 @@ export const SEQUENCES: Record<string, Sequence> = {
     steps: [
       { agent: "aiana-ops",       type: "recall" },
       { agent: "n8n-ops",         type: "specialist" },
-      { agent: "cloudflare-ops",  type: "specialist", conditional: true },
+      {
+        agent: "cloudflare-ops",
+        type: "specialist",
+        condition: (query) => /ry-ops\.dev|pages|blog|deploy|publish/i.test(query),
+      },
       { agent: "aiana-ops",       type: "record" },
     ],
   },
@@ -93,3 +102,22 @@ export const SEQUENCES: Record<string, Sequence> = {
     ],
   },
 };
+
+/**
+ * Resolve a sequence to the steps that should actually run,
+ * evaluating conditional steps against the original query and prior context.
+ */
+export function resolveSequenceSteps(
+  seqId: string,
+  query: string,
+  priorContext = "",
+): SequenceStep[] {
+  const seq = SEQUENCES[seqId];
+  if (!seq) {
+    console.warn(`[sequences] Unknown sequence: ${seqId}`);
+    return [];
+  }
+  return seq.steps.filter(
+    (s) => !s.condition || s.condition(query, priorContext),
+  );
+}

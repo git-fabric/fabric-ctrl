@@ -16,11 +16,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@git-fabric/gateway": "github:git-fabric/gateway",
+    "@anthropic-ai/sdk": "^0.78.0",
     "@git-fabric/aiana": "github:git-fabric/aiana",
     "@git-fabric/chat": "github:git-fabric/chat",
     "@git-fabric/cloudflare": "github:git-fabric/cloudflare",
     "@git-fabric/cve": "github:git-fabric/cve",
+    "@git-fabric/gateway": "github:git-fabric/gateway",
     "@git-fabric/git": "github:git-fabric/git",
     "@git-fabric/k8s": "github:git-fabric/k8s",
     "@git-fabric/proxmox": "github:git-fabric/proxmox",

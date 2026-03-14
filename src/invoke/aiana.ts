@@ -4,7 +4,7 @@
  * Non-fatal: failures are logged and swallowed, never abort the invocation.
  */
 
-const AIANA_ENDPOINT = process.env.AIANA_ENDPOINT ?? "http://localhost:8765";
+const AIANA_ENDPOINT = process.env.AIANA_ENDPOINT ?? "http://fabric-aiana.fabric-sdk:8100";
 
 /**
  * Recall: search AIANA for prior context relevant to the query.

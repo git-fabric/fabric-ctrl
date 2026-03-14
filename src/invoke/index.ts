@@ -18,7 +18,7 @@ import type {
   Step,
 } from "./types.js";
 
-const GATEWAY_URL = process.env.GATEWAY_URL ?? "http://localhost:7340";
+const GATEWAY_URL = process.env.GATEWAY_URL ?? "http://fabric-gateway.fabric-sdk:7340";
 
 /**
  * Handle a full /invoke request — route, dispatch, chain, record.

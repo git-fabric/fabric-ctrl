@@ -5,7 +5,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { MODEL_REGISTRY } from "./types.js";
 
-const OLLAMA_ENDPOINT = process.env.OLLAMA_ENDPOINT ?? "http://localhost:11434";
+const OLLAMA_ENDPOINT = process.env.OLLAMA_ENDPOINT ?? "http://ollama.fabric-sdk:11434";
 const SPECIALIST_TIMEOUT_MS = Number(process.env.SPECIALIST_TIMEOUT_MS ?? 30000);
 const ROUTER_TIMEOUT_MS = Number(process.env.ROUTER_TIMEOUT_MS ?? 10000);
 

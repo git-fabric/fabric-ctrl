@@ -6,7 +6,10 @@ RUN apk add --no-cache git
 
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN --mount=type=secret,id=github_token \
+    git config --global url."https://x-access-token:$(cat /run/secrets/github_token)@github.com/".insteadOf "https://github.com/" && \
+    npm ci && \
+    git config --global --unset url."https://x-access-token:$(cat /run/secrets/github_token)@github.com/".insteadOf
 COPY tsconfig.json ./
 COPY src/ ./src/
 RUN npm run build
@@ -23,7 +26,10 @@ RUN apk add --no-cache git && \
 
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci --omit=dev && npm cache clean --force
+RUN --mount=type=secret,id=github_token \
+    git config --global url."https://x-access-token:$(cat /run/secrets/github_token)@github.com/".insteadOf "https://github.com/" && \
+    npm ci --omit=dev && npm cache clean --force && \
+    git config --global --unset url."https://x-access-token:$(cat /run/secrets/github_token)@github.com/".insteadOf
 COPY --from=builder /app/dist ./dist
 
 USER fabric

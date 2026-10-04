@@ -35,7 +35,7 @@
     "@octokit/rest": "^21.0.0",
     "@octokit/webhooks": "^13.0.0",
     "dotenv": "^16.0.0",
-    "hono": "^4.0.0",
+    "hono": "^4.13.13",
     "yaml": "^2.3.0",
     "zod": "^3.22.0",
     "zod-to-json-schema": "^3.25.1"

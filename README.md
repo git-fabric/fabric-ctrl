@@ -6,7 +6,7 @@
   <a href="https://github.com/git-fabric/fabric-ctrl/releases"><img src="https://img.shields.io/github/v/release/git-fabric/fabric-ctrl?style=flat-square&color=58a6ff&label=version" alt="Version"/></a>
   <a href="https://github.com/git-fabric/fabric-ctrl/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-8b949e?style=flat-square" alt="License"/></a>
   <a href="https://github.com/git-fabric"><img src="https://img.shields.io/badge/org-git--fabric-3fb950?style=flat-square" alt="git-fabric"/></a>
-  <a href="adr/local/ADR-0001-0004.md"><img src="https://img.shields.io/badge/posture-zero--trust-ff7b72?style=flat-square" alt="Zero Trust"/></a>
+  <a href="adr/ADR-0001-0004.md"><img src="https://img.shields.io/badge/posture-zero--trust-ff7b72?style=flat-square" alt="Zero Trust"/></a>
 </p>
 
 ---
@@ -38,7 +38,7 @@ Two entrypoints, one identity:
   <img src="docs/images/zero-trust.svg" alt="Zero-Trust Posture" width="900"/>
 </p>
 
-See [`adr/local/ADR-0001-0004.md`](adr/local/ADR-0001-0004.md) for the full architectural rationale.
+See [`adr/ADR-0001-0004.md`](adr/ADR-0001-0004.md) for the full architectural rationale.
 
 ---
 
@@ -164,6 +164,7 @@ fabric-ctrl/
 │   │   └── middleware/
 │   │       └── verify-signature.ts   # HMAC-SHA256 webhook verification
 │   ├── invoke/                       # fabric-invoke: router, sequences, Aiana
+│   ├── resolve/                      # fabric.resolve looking glass (AI-ADR-013)
 │   └── mcp/                          # MCP server
 │       ├── index.ts                  # stdio MCP server
 │       ├── loader.ts                 # Loads fabric apps from gateway.yaml
@@ -171,7 +172,7 @@ fabric-ctrl/
 │           └── org.ts                # org__* tools
 ├── adr/
 │   ├── global/                       # Org-wide ADRs, synced from git-fabric/adr
-│   └── local/                        # fabric-ctrl ADRs
+│   └── ADR-0001-0004.md              # fabric-ctrl ADRs
 ├── docs/images/                      # README diagrams
 ├── scripts/
 │   └── ollama-load.sh                # Load fabric vLLM Modelfiles into Ollama

@@ -4,3 +4,4 @@ dist/
 secrets/
 *.pem
 .DS_Store
+state/

@@ -29,7 +29,7 @@
     "@git-fabric/tailscale": "github:git-fabric/tailscale",
     "@git-fabric/unifi": "github:git-fabric/unifi",
     "@hono/node-server": "^1.19.11",
-    "@modelcontextprotocol/sdk": "^1.26.0",
+    "@modelcontextprotocol/sdk": "^1.32.1",
     "@octokit/app": "^15.0.0",
     "@octokit/auth-app": "^7.0.0",
     "@octokit/rest": "^21.0.0",

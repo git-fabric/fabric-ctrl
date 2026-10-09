@@ -8,7 +8,7 @@ interface GatewayConfig {
   }>;
 }
 
-interface FabricApp {
+export interface FabricApp {
   name: string;
   version: string;
   description: string;
@@ -16,6 +16,7 @@ interface FabricApp {
     name: string;
     description: string;
     inputSchema: Record<string, unknown>;
+    annotations?: { readOnlyHint?: boolean; destructiveHint?: boolean; idempotentHint?: boolean; openWorldHint?: boolean };
     execute: (args: Record<string, unknown>) => Promise<unknown>;
   }>;
   health: () => Promise<{ app: string; status: string; latencyMs?: number }>;

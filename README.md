@@ -128,6 +128,22 @@ npm run dev:mcp
 
 All tools use the App identity — no credentials accepted as input.
 
+### Looking glass: `fabric_resolve`
+
+Ask what the fabric can do for an intent without doing anything ([AI-ADR-013](https://github.com/git-fabric/adr/blob/main/docs/AI-ADR-013-fabric-resolve-looking-glass.md)). Read-only; it never executes a tool.
+
+```json
+{ "intent": "reboot the plex vm", "constraints": { "readOnly": false, "localOnly": false, "maxSteps": 8 } }
+```
+
+It answers with a verdict (`have`, `partial` or `missing`), an ordered plan, typed gaps and an escalation hint:
+
+- **Plan:** each step names the app and tool, its effect (`read`, `write` or `destructive`, from the tool's MCP annotations), app health, credential scope, and whether a loaded fabric-llm model can run it locally.
+- **Gaps:** `no_tool`, `app_down`, `stale_inventory`, `insufficient_scope`, `policy_denied` or `low_confidence`, each with a suggestion (`build_app`, `restore_app`, `grant_scope`, `improve_description`) and a signature that groups reworded intents.
+- **Confidence:** below 0.6 the answer is advisory; plans that span apps are always advisory.
+
+The inventory is built live from the apps loaded via `gateway.yaml` and refreshed every `RESOLVE_TTL_SECONDS / 2` (default TTL 300s). Matching is lexical for now; plan assembly is deterministic. `fabric_route` and `fabric_invoke` with `dry_run: true` return the same answer.
+
 ---
 
 ## Webhook Events

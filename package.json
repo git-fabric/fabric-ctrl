@@ -1,7 +1,7 @@
 {
   "name": "@git-fabric/fabric-ctrl",
   "version": "0.1.0",
-  "description": "Zero-trust control plane for the git-fabric org — GitHub App identity, security automation, and MCP aggregation plane.",
+  "description": "Zero-trust control plane for the git-fabric org \u2014 GitHub App identity, security automation, and MCP aggregation plane.",
   "type": "module",
   "engines": {
     "node": ">=20"
@@ -13,7 +13,8 @@
     "start:app": "node dist/app/index.js",
     "start:mcp": "node dist/mcp/index.js",
     "lint": "eslint src/**/*.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",
@@ -27,7 +28,7 @@
     "@git-fabric/proxmox": "github:git-fabric/proxmox",
     "@git-fabric/sandfly": "github:git-fabric/sandfly",
     "@git-fabric/tailscale": "github:git-fabric/tailscale",
-    "@git-fabric/unifi": "github:git-fabric/unifi",
+    "@git-fabric/unifi": "github:git-fabric/unifi#main",
     "@hono/node-server": "^1.19.17",
     "@modelcontextprotocol/sdk": "^1.32.1",
     "@octokit/app": "^15.0.0",
@@ -43,6 +44,7 @@
   "devDependencies": {
     "@types/node": "^20.0.0",
     "tsx": "^4.23.15",
-    "typescript": "^5.4.0"
+    "typescript": "^5.4.0",
+    "vitest": "^4.1.11"
   }
 }

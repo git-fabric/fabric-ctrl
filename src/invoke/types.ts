@@ -2,6 +2,8 @@
  * invoke/types.ts — Request, response, and domain types for fabric-invoke
  */
 
+import type { ResolveOutput } from "../resolve/schema.js";
+
 export interface InvokeRequest {
   query: string;
   project?: string;
@@ -35,9 +37,10 @@ export interface InvokeResponse {
   total_duration_ms: number;
 }
 
+/** dry_run answers from fabric.resolve: a plan, not a model's routing guess (AI-ADR-013) */
 export interface DryRunResponse {
-  route: Omit<RouteDecision, "context_pass">;
   dry_run: true;
+  resolve: ResolveOutput;
 }
 
 export interface StatusResponse {

@@ -24,7 +24,12 @@ export interface DispatchResult {
 
 let _apps: Awaited<ReturnType<typeof loadApps>> | null = null;
 
-async function getApps() {
+/** Seed the shared list with apps an entrypoint already loaded, so they load once */
+export function setApps(apps: Awaited<ReturnType<typeof loadApps>>): void {
+  _apps = apps;
+}
+
+export async function getApps() {
   if (_apps) return _apps;
   const configPath = resolve(process.env.GATEWAY_CONFIG ?? "./gateway.yaml");
   _apps = await loadApps(configPath);

@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="banner.svg" alt="fabric-ctrl" width="900"/>
+  <img src="docs/images/banner.svg" alt="fabric-ctrl" width="900"/>
 </p>
 
 <p align="center">
   <a href="https://github.com/git-fabric/fabric-ctrl/releases"><img src="https://img.shields.io/github/v/release/git-fabric/fabric-ctrl?style=flat-square&color=58a6ff&label=version" alt="Version"/></a>
   <a href="https://github.com/git-fabric/fabric-ctrl/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-8b949e?style=flat-square" alt="License"/></a>
   <a href="https://github.com/git-fabric"><img src="https://img.shields.io/badge/org-git--fabric-3fb950?style=flat-square" alt="git-fabric"/></a>
-  <a href="docs/adr/ADR-0001-0004.md"><img src="https://img.shields.io/badge/posture-zero--trust-ff7b72?style=flat-square" alt="Zero Trust"/></a>
+  <a href="adr/local/ADR-0001-0004.md"><img src="https://img.shields.io/badge/posture-zero--trust-ff7b72?style=flat-square" alt="Zero Trust"/></a>
 </p>
 
 ---
@@ -20,7 +20,7 @@ It is **not** a proxy for the individual fabric app servers. Those handle their 
 ## Architecture
 
 <p align="center">
-  <img src="architecture.svg" alt="Architecture" width="900"/>
+  <img src="docs/images/architecture.svg" alt="Architecture" width="900"/>
 </p>
 
 Two entrypoints, one identity:
@@ -35,17 +35,17 @@ Two entrypoints, one identity:
 ## Zero-Trust Posture
 
 <p align="center">
-  <img src="zero-trust.svg" alt="Zero-Trust Posture" width="900"/>
+  <img src="docs/images/zero-trust.svg" alt="Zero-Trust Posture" width="900"/>
 </p>
 
-See [`docs/adr/ADR-0001-0004.md`](docs/adr/ADR-0001-0004.md) for the full architectural rationale.
+See [`adr/local/ADR-0001-0004.md`](adr/local/ADR-0001-0004.md) for the full architectural rationale.
 
 ---
 
 ## Ecosystem
 
 <p align="center">
-  <img src="ecosystem.svg" alt="Ecosystem" width="900"/>
+  <img src="docs/images/ecosystem.svg" alt="Ecosystem" width="900"/>
 </p>
 
 `fabric-ctrl` does not proxy the individual app MCP servers. It owns the org layer. The individual apps own their infrastructure domains. The [gateway](https://github.com/git-fabric/gateway) handles routing between them.
@@ -55,7 +55,7 @@ See [`docs/adr/ADR-0001-0004.md`](docs/adr/ADR-0001-0004.md) for the full archit
 ## Ollama Inference Flow
 
 <p align="center">
-  <img src="ollama-flow.svg" alt="Ollama Inference Flow" width="900"/>
+  <img src="docs/images/ollama-flow.svg" alt="Ollama Inference Flow" width="900"/>
 </p>
 
 All inference stays local. Chat and Aiana use the shared Ollama instance running in the k3s cluster — no API tokens leave the network. `fabric-ctrl` routes tool calls to the appropriate fabric app, which hits the infrastructure directly.
@@ -153,6 +153,9 @@ fabric-ctrl/
 │   ├── app/                          # GitHub App webhook server
 │   │   ├── index.ts                  # Hono server, event dispatch
 │   │   ├── auth.ts                   # App JWT + installation token
+│   │   ├── dispatch.ts               # Fabric app tool dispatch
+│   │   ├── audit-log.ts              # Audit log persistence
+│   │   ├── notify.ts                 # Outbound webhook notifications
 │   │   ├── handlers/                 # Typed event handlers
 │   │   │   ├── push.ts
 │   │   │   ├── security-alert.ts
@@ -160,14 +163,23 @@ fabric-ctrl/
 │   │   │   └── audit.ts
 │   │   └── middleware/
 │   │       └── verify-signature.ts   # HMAC-SHA256 webhook verification
+│   ├── invoke/                       # fabric-invoke: router, sequences, Aiana
 │   └── mcp/                          # MCP server
 │       ├── index.ts                  # stdio MCP server
+│       ├── loader.ts                 # Loads fabric apps from gateway.yaml
 │       └── tools/
 │           └── org.ts                # org__* tools
-├── docs/adr/                         # Architectural decision records
+├── adr/
+│   ├── global/                       # Org-wide ADRs, synced from git-fabric/adr
+│   └── local/                        # fabric-ctrl ADRs
+├── docs/images/                      # README diagrams
+├── scripts/
+│   └── ollama-load.sh                # Load fabric vLLM Modelfiles into Ollama
 ├── secrets/                          # gitignored — private key lives here
 ├── .env.example
+├── gateway.yaml                      # Fabric app manifest
 ├── mcp.json                          # Claude Desktop config
+├── Dockerfile
 ├── package.json
 └── tsconfig.json
 ```

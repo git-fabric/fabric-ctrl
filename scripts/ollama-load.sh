@@ -2,10 +2,10 @@
 # ollama-load.sh — Load all 14 fabric-sdk vLLM Modelfiles into Ollama
 #
 # Usage:
-#   ./ollama-load.sh                  # load all models
-#   ./ollama-load.sh k3s-ops          # load one specific model
-#   ./ollama-load.sh --dry-run        # print commands without executing
-#   ./ollama-load.sh --check          # verify which models are already loaded
+#   bash scripts/ollama-load.sh                  # load all models
+#   bash scripts/ollama-load.sh k3s-ops          # load one specific model
+#   bash scripts/ollama-load.sh --dry-run        # print commands without executing
+#   bash scripts/ollama-load.sh --check          # verify which models are already loaded
 #
 # Prerequisites:
 #   - Ollama running (ollama serve or systemctl start ollama)
@@ -220,7 +220,7 @@ check_models() {
   log "Loaded: ${loaded}/${#MODELS[@]}   Missing: ${missing}/${#MODELS[@]}"
   if [[ $missing -gt 0 ]]; then
     echo ""
-    log "Run './ollama-load.sh' to load all missing models."
+    log "Run 'bash scripts/ollama-load.sh' to load all missing models."
   fi
 }
 
@@ -278,7 +278,7 @@ echo ""
 
 if ! $DRY_RUN && [[ $FAILED -eq 0 ]]; then
   log "All models ready. Verify with:"
-  echo "  ./ollama-load.sh --check"
+  echo "  bash scripts/ollama-load.sh --check"
   echo "  curl -s ${OLLAMA_ENDPOINT}/api/tags | jq '.models[].name'"
   echo ""
   log "Test routing:"

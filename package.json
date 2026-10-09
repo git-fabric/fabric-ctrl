@@ -1,7 +1,7 @@
 {
   "name": "@git-fabric/fabric-ctrl",
   "version": "0.1.0",
-  "description": "Zero-trust control plane for the git-fabric org \u2014 GitHub App identity, security automation, and MCP aggregation plane.",
+  "description": "Zero-trust control plane for the git-fabric org — GitHub App identity, security automation, and MCP aggregation plane.",
   "type": "module",
   "engines": {
     "node": ">=20"
@@ -12,7 +12,6 @@
     "dev:mcp": "tsx watch src/mcp/index.ts",
     "start:app": "node dist/app/index.js",
     "start:mcp": "node dist/mcp/index.js",
-    "lint": "eslint src/**/*.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
   },
@@ -32,8 +31,6 @@
     "@hono/node-server": "^1.19.17",
     "@modelcontextprotocol/sdk": "^1.32.1",
     "@octokit/app": "^15.0.0",
-    "@octokit/auth-app": "^7.0.0",
-    "@octokit/rest": "^21.0.0",
     "@octokit/webhooks": "^13.0.0",
     "dotenv": "^16.0.0",
     "hono": "^4.13.13",

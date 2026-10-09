@@ -32,7 +32,7 @@ function validateAgent(name: string): string | null {
  * Create a Claude fallback route decision.
  * Used when fabric-router output can't be parsed or returns unknown agents.
  */
-export function claudeFallbackRoute(reason: string): RouteDecision {
+function claudeFallbackRoute(reason: string): RouteDecision {
   return {
     primary: "__claude__",
     secondary: [],

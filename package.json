@@ -12,8 +12,8 @@
     "dev:mcp": "tsx watch src/mcp/index.ts",
     "start:app": "node dist/app/index.js",
     "start:mcp": "node dist/mcp/index.js",
-    "lint": "eslint src/**/*.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",
@@ -27,12 +27,10 @@
     "@git-fabric/proxmox": "github:git-fabric/proxmox",
     "@git-fabric/sandfly": "github:git-fabric/sandfly",
     "@git-fabric/tailscale": "github:git-fabric/tailscale",
-    "@git-fabric/unifi": "github:git-fabric/unifi",
+    "@git-fabric/unifi": "github:git-fabric/unifi#main",
     "@hono/node-server": "^1.19.17",
     "@modelcontextprotocol/sdk": "^1.32.1",
     "@octokit/app": "^15.0.0",
-    "@octokit/auth-app": "^7.0.0",
-    "@octokit/rest": "^21.0.0",
     "@octokit/webhooks": "^13.0.0",
     "dotenv": "^16.0.0",
     "hono": "^4.13.13",
@@ -43,6 +41,7 @@
   "devDependencies": {
     "@types/node": "^20.0.0",
     "tsx": "^4.23.15",
-    "typescript": "^5.4.0"
+    "typescript": "^5.4.0",
+    "vitest": "^4.1.11"
   }
 }

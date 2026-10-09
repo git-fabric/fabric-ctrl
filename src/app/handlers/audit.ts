@@ -78,7 +78,7 @@ export async function handleOrganization(
 export async function handleWorkflowRun(
   event: EmitterWebhookEvent<"workflow_run">
 ): Promise<void> {
-  const { action, workflow_run, repository } = event.payload;
+  const { workflow_run, repository } = event.payload;
 
   if (workflow_run.conclusion === "failure") {
     console.log(

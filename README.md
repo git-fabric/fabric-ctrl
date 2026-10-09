@@ -6,7 +6,7 @@
   <a href="https://github.com/git-fabric/fabric-ctrl/releases"><img src="https://img.shields.io/github/v/release/git-fabric/fabric-ctrl?style=flat-square&color=58a6ff&label=version" alt="Version"/></a>
   <a href="https://github.com/git-fabric/fabric-ctrl/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-8b949e?style=flat-square" alt="License"/></a>
   <a href="https://github.com/git-fabric"><img src="https://img.shields.io/badge/org-git--fabric-3fb950?style=flat-square" alt="git-fabric"/></a>
-  <a href="adr/ADR-0001-0004.md"><img src="https://img.shields.io/badge/posture-zero--trust-ff7b72?style=flat-square" alt="Zero Trust"/></a>
+  <a href="adr/ADR-0004-zero-trust-posture.md"><img src="https://img.shields.io/badge/posture-zero--trust-ff7b72?style=flat-square" alt="Zero Trust"/></a>
 </p>
 
 ---
@@ -38,7 +38,7 @@ Two entrypoints, one identity:
   <img src="docs/images/zero-trust.svg" alt="Zero-Trust Posture" width="900"/>
 </p>
 
-See [`adr/ADR-0001-0004.md`](adr/ADR-0001-0004.md) for the full architectural rationale.
+The rationale is in fabric-ctrl's ADRs: [identity](adr/ADR-0001-github-app-identity.md), [webhook event bus](adr/ADR-0002-webhook-security-event-bus.md), [MCP control plane](adr/ADR-0003-mcp-org-control-plane.md) and [zero-trust posture](adr/ADR-0004-zero-trust-posture.md).
 
 ---
 
@@ -128,6 +128,22 @@ npm run dev:mcp
 
 All tools use the App identity — no credentials accepted as input.
 
+### Looking glass: `fabric_resolve`
+
+Ask what the fabric can do for an intent without doing anything ([AI-ADR-013](https://github.com/git-fabric/adr/blob/main/docs/AI-ADR-013-fabric-resolve-looking-glass.md)). Read-only; it never executes a tool.
+
+```json
+{ "intent": "reboot the plex vm", "constraints": { "readOnly": false, "localOnly": false, "maxSteps": 8 } }
+```
+
+It answers with a verdict (`have`, `partial` or `missing`), an ordered plan, typed gaps and an escalation hint:
+
+- **Plan:** each step names the app and tool, its effect (`read`, `write` or `destructive`, from the tool's MCP annotations), app health, credential scope, and whether a loaded fabric-llm model can run it locally.
+- **Gaps:** `no_tool`, `app_down`, `stale_inventory`, `insufficient_scope`, `policy_denied` or `low_confidence`, each with a suggestion (`build_app`, `restore_app`, `grant_scope`, `improve_description`) and a signature that groups reworded intents.
+- **Confidence:** below 0.6 the answer is advisory; plans that span apps are always advisory.
+
+The inventory is built live from the apps loaded via `gateway.yaml` and refreshed every `RESOLVE_TTL_SECONDS / 2` (default TTL 300s). Matching is lexical for now; plan assembly is deterministic. `fabric_route` and `fabric_invoke` with `dry_run: true` return the same answer.
+
 ---
 
 ## Webhook Events
@@ -142,6 +158,28 @@ All tools use the App identity — no credentials accepted as input.
 | `member` | `audit.ts` | Logs all access grants |
 | `organization` | `audit.ts` | Flags membership changes |
 | `workflow_run` | `audit.ts` | Flags fork-triggered workflows |
+
+---
+
+## Upcoming
+
+What is left after `fabric_resolve` phase 1, roughly in order:
+
+**`fabric_resolve` (AI-ADR-013)**
+- [ ] **Tool-level sequence templates:** rewrite SEQ-01…06 (`src/invoke/sequences.ts`) as tool-level `TEMPLATES` in `src/resolve/plan.ts`. They name specialist models today, not tools.
+- [ ] **Apps that fail to load show as `app_down`:** an app whose `createApp()` throws (e.g. aiana without `QDRANT_API_KEY`) is missing from the inventory, so its intents answer `no_tool` instead of `app_down`.
+- [ ] **Gap backlog:** persist gap signatures with counts and hand recurring ones to git-steer as build issues.
+- [ ] **Credential scope:** apps declare `requiredScopes` per tool so plans report `ok` or `insufficient` instead of `unknown`.
+- [ ] **Caller policy:** per-caller limits beyond the `readOnly` and `localOnly` constraints.
+
+**Phase 2**
+- [ ] **F-RIB inventory:** read capabilities from the `@fabric-sdk/gateway` route reflector once it is deployed, alongside the in-process registry.
+- [ ] **Semantic matcher:** swap the lexical matcher for Qdrant embeddings behind the same `Matcher` interface.
+
+**Housekeeping**
+- [ ] `org__get_security_overview` accepts a `repo` filter but ignores it.
+- [ ] Add `fabric-review`'s tool-contract rule to PR checks, so unannotated tools are caught before merge.
+- [ ] Merge or close the pending `chore: sync global ADRs` PR (#22; its commit is unsigned, so it needs a signed re-push).
 
 ---
 
@@ -172,7 +210,7 @@ fabric-ctrl/
 │           └── org.ts                # org__* tools
 ├── adr/
 │   ├── global/                       # Org-wide ADRs, synced from git-fabric/adr
-│   └── ADR-0001-0004.md              # fabric-ctrl ADRs
+│   └── ADR-000N-*.md                 # fabric-ctrl ADRs, one per decision
 ├── docs/images/                      # README diagrams
 ├── scripts/
 │   └── ollama-load.sh                # Load fabric vLLM Modelfiles into Ollama

@@ -11,6 +11,8 @@ import { loadApps } from "./loader.js";
 import { orgTools } from "./tools/org.js";
 import { handleInvoke, handleStatus } from "../invoke/index.js";
 import type { InvokeRequest } from "../invoke/types.js";
+import { setApps } from "../app/dispatch.js";
+import { resolveIntent, ResolveInput } from "../resolve/index.js";
 
 /**
  * mcp/index.ts — fabric-ctrl aggregation plane
@@ -20,6 +22,7 @@ import type { InvokeRequest } from "../invoke/types.js";
  *
  * Tool surface:
  *   - fabric_health, fabric_apps  (built-in)
+ *   - fabric_resolve              (read-only looking glass, AI-ADR-013)
  *   - org__*                       (GitHub App identity)
  *   - unifi_*, proxmox_*, k8s_*,  (fabric apps loaded from gateway.yaml)
  *     tailscale_*, cloudflare_*,
@@ -33,6 +36,7 @@ import type { InvokeRequest } from "../invoke/types.js";
 
 const configPath = resolve(process.env.GATEWAY_CONFIG ?? "./gateway.yaml");
 const apps = await loadApps(configPath);
+setApps(apps); // resolve's inventory reads the same in-process apps
 
 for (const app of apps) {
   console.error(`[fabric-ctrl] registered ${app.name} (${app.tools.length} tools)`);
@@ -63,24 +67,36 @@ function buildServer(apps: Awaited<ReturnType<typeof loadApps>>, orgTools: typeo
       name: "fabric_health",
       description:
         "Health check across all registered fabric apps. Returns status, latency, and details for each app.",
+      annotations: { readOnlyHint: true },
       inputSchema: { type: "object" as const, properties: {} },
     },
     {
       name: "fabric_apps",
       description:
         "List all registered fabric apps and their tools.",
+      annotations: { readOnlyHint: true },
       inputSchema: { type: "object" as const, properties: {} },
+    },
+    {
+      name: "fabric_resolve",
+      description:
+        "Ask what the fabric can do for an intent without doing it. Returns a verdict (have/partial/missing), " +
+        "an ordered plan of tools with read/write effect, app health and credential scope, typed gaps for " +
+        "anything missing, and whether local models or Claude should run it. Read-only; executes nothing.",
+      annotations: { readOnlyHint: true, idempotentHint: true },
+      inputSchema: zodToJsonSchema(ResolveInput) as { type: "object" },
     },
     {
       name: "fabric_invoke",
       description:
         "Route a query through the fabric-sdk specialist model pool. Automatically selects the correct specialist agent(s), executes multi-step sequences, recalls AIANA context, and records the outcome.",
+      annotations: { readOnlyHint: false, destructiveHint: false },
       inputSchema: {
         type: "object" as const,
         properties: {
           query: { type: "string", description: "The natural language query or task" },
           project: { type: "string", description: "AIANA project scope (e.g. 'stackforge', 'git-steer')" },
-          dry_run: { type: "boolean", description: "Return routing decision only, no execution (default: false)" },
+          dry_run: { type: "boolean", description: "Return the fabric_resolve plan only, no execution (default: false)" },
           record: { type: "boolean", description: "Record outcome to AIANA (default: true)" },
         },
         required: ["query"],
@@ -89,7 +105,8 @@ function buildServer(apps: Awaited<ReturnType<typeof loadApps>>, orgTools: typeo
     {
       name: "fabric_route",
       description:
-        "Get the routing decision for a query without executing it. Equivalent to fabric_invoke with dry_run: true.",
+        "Plan a query without executing it: returns the fabric_resolve output for the query. Equivalent to fabric_invoke with dry_run: true.",
+      annotations: { readOnlyHint: true },
       inputSchema: {
         type: "object" as const,
         properties: {
@@ -102,6 +119,7 @@ function buildServer(apps: Awaited<ReturnType<typeof loadApps>>, orgTools: typeo
       name: "fabric_status",
       description:
         "Health check — which Ollama models are loaded, AIANA reachable, gateway registered.",
+      annotations: { readOnlyHint: true },
       inputSchema: { type: "object" as const, properties: {} },
     },
   ];
@@ -113,6 +131,7 @@ function buildServer(apps: Awaited<ReturnType<typeof loadApps>>, orgTools: typeo
       name: t.name,
       description: t.description,
       inputSchema: zodToJsonSchema(t.inputSchema),
+      annotations: { readOnlyHint: true }, // org__* tools only read through the App identity
     }));
   
     const appToolDefs = apps.flatMap((app) =>
@@ -120,6 +139,7 @@ function buildServer(apps: Awaited<ReturnType<typeof loadApps>>, orgTools: typeo
         name: tool.name,
         description: `[${app.name}] ${tool.description}`,
         inputSchema: tool.inputSchema,
+        ...(tool.annotations && { annotations: tool.annotations }),
       }))
     );
   
@@ -152,6 +172,22 @@ function buildServer(apps: Awaited<ReturnType<typeof loadApps>>, orgTools: typeo
       };
     }
   
+    // Built-in: fabric_resolve
+    if (name === "fabric_resolve") {
+      try {
+        const result = await resolveIntent(args ?? {});
+        return {
+          content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        };
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        return {
+          content: [{ type: "text", text: `fabric_resolve error: ${message}` }],
+          isError: true,
+        };
+      }
+    }
+
     // Built-in: fabric_invoke
     if (name === "fabric_invoke") {
       try {

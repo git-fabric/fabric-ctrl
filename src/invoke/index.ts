@@ -10,6 +10,7 @@ import { routeQuery } from "./router.js";
 import { callModel, callClaude, buildChainedPrompt, listLoadedModels, getOllamaEndpoint } from "./dispatcher.js";
 import { recallContext, recordOutcome, isAianaReachable, getAianaEndpoint, hasMemoryLanguage } from "./aiana.js";
 import { SEQUENCES, resolveSequenceSteps } from "./sequences.js";
+import { resolveIntent } from "../resolve/index.js";
 import type {
   InvokeRequest,
   InvokeResponse,
@@ -26,6 +27,11 @@ const GATEWAY_URL = process.env.GATEWAY_URL ?? "http://fabric-gateway.fabric-sdk
 export async function handleInvoke(
   req: InvokeRequest,
 ): Promise<InvokeResponse | DryRunResponse> {
+  // Dry run — fabric.resolve plans without calling any model or tool
+  if (req.dry_run) {
+    return { dry_run: true, resolve: await resolveIntent({ intent: req.query }) };
+  }
+
   const totalStart = Date.now();
   const shouldRecord = req.record !== false;
 
@@ -41,12 +47,6 @@ export async function handleInvoke(
       (decision.escalated_to_claude ? " (escalated to Claude)" : "") +
       ` (${routeDuration}ms)`,
   );
-
-  // Dry run — return route metadata only
-  if (req.dry_run) {
-    const { context_pass: _, ...route } = decision;
-    return { route, dry_run: true };
-  }
 
   const steps: Step[] = [];
   const priorOutputs: Array<{ agent: string; output: string }> = [];
